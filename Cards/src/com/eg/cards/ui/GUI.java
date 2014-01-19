@@ -31,15 +31,16 @@ import com.eg.cards.GameLoop;
 
 public class GUI extends Table implements Disposable{
 	
-	private final Table handTable, stackTable, infoTable, tabTable;
+	private final Table handTable, stackTable, tabTable;
 	private GameLoop loop;
-	private BitmapFont font;
+	private BitmapFont defaultFont, msgFont;
 	private Array<Label> labels;
 	private Array<Image> avatars, icons;
 	private Array<Table> info, tabs;
 	private TextureAtlas atlas;
 	private Dialog error;
-	private LabelStyle lStyle;
+	private LabelStyle scoreStyle, msgStyle;
+	private Image cIcon;
 	
 	private Array<AtlasRegion> iconRegions;
 	
@@ -52,7 +53,12 @@ public class GUI extends Table implements Disposable{
 		
 		FreeTypeFontGenerator generator =
         		new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-        font = generator.generateFont(60);
+		defaultFont = generator.generateFont(60);
+        generator.dispose();
+        
+        generator =
+        		new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Medium.ttf"));
+        msgFont = generator.generateFont(60);
         generator.dispose();
         
         setFillParent(true);
@@ -60,13 +66,9 @@ public class GUI extends Table implements Disposable{
         
         stackTable = new Table();
 		handTable = new Table();
-		infoTable = new Table();
 		tabTable = new Table();
 		
-		if (CardGame.debug){
-			tabTable.debug();
-			infoTable.debug();
-		}
+		if (CardGame.debug) tabTable.debug();
         
 	}
 	
@@ -75,11 +77,12 @@ public class GUI extends Table implements Disposable{
 		
 		final Array<Player> players = loop.getPlayers();
 		
-        atlas = new TextureAtlas(Gdx.files.internal("ui.atlas"));
-        AtlasRegion white = atlas.findRegion("white");
+        atlas = game.getUIAtlas();
         AtlasRegion avatar = atlas.findRegion("avatar");
-        AtlasRegion bar = atlas.findRegion("tabs");
+        AtlasRegion tabBg = atlas.findRegion("tab");
         AtlasRegion but = atlas.findRegion("button");
+        AtlasRegion msgbackground = atlas.findRegion("dialog");
+        AtlasRegion cards = atlas.findRegion("cards");
         
         iconRegions = new Array<AtlasRegion>(10);
         iconRegions.add(atlas.findRegion("9"));
@@ -102,17 +105,21 @@ public class GUI extends Table implements Disposable{
         /** Warning Dialog */
         
         WindowStyle dStyle = new WindowStyle();
-        dStyle.titleFont = font;
-        dStyle.titleFontColor = Color.BLACK;
-        dStyle.background = new TextureRegionDrawable(white);
+        dStyle.titleFont = defaultFont;
+        dStyle.titleFontColor = Color.WHITE;
+        dStyle.background = new TextureRegionDrawable(msgbackground);
         
         error = new Dialog("", dStyle);
         if (CardGame.debug) error.debug();
         
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(but);
-        buttonStyle.font = font;
+        buttonStyle.font = msgFont;
         buttonStyle.fontColor = Color.WHITE;
+        
+        msgStyle = new LabelStyle();
+        msgStyle.font = msgFont;
+        msgStyle.fontColor = Color.WHITE;
         
         TextButton button = new TextButton("OK", buttonStyle);
         button.addListener(new ClickListener(){
@@ -121,19 +128,24 @@ public class GUI extends Table implements Disposable{
         	}
         });
         
+        cIcon = new Image(cards);
+        
+        error.getCell(error.getContentTable()).height(550).fill(true, false);
+        error.getCell(error.getButtonTable()).height(250).fill(true, false);
+        
         error.button(button);
         
-        /** Info bar */
+        /** Tab bar */
         
-        lStyle = new LabelStyle();
-        lStyle.font = font;
-        lStyle.fontColor = Color.BLACK;
+        scoreStyle = new LabelStyle();
+        scoreStyle.font = defaultFont;
+        scoreStyle.fontColor = Color.BLACK;
         
         for(Player p : players){
         	Image img = new Image(avatar);
         	if (!p.isTeamRe()) img.setColor(212/255f, 0, 0, 1);
         	else img.setColor(Color.BLACK);
-        	Label l = new Label(Short.toString(p.getPoints()), lStyle);
+        	Label l = new Label(Short.toString(p.getPoints()), scoreStyle);
         	l.setAlignment(Align.center);
         	avatars.add(img);
         	labels.add(l);
@@ -146,38 +158,35 @@ public class GUI extends Table implements Disposable{
         	}
         });
         
-        infoTable.setBackground(new TextureRegionDrawable(white));
-        infoTable.center();
-        infoTable.defaults().expandX().space(15);
+        tabTable.center();
+        tabTable.defaults().expandX().space(0);
+        
+        for (int i=0; i<8; i++) icons.add(new Image());
         
         for (int i=0; i<4; i++){
         	Table t = new Table();
-        	t.defaults().expandX().spaceRight(20);
-        	t.add(avatars.get(i));
-        	t.add(labels.get(i));
+        	Table top = new Table();
+        	Table bottom = new Table();
+        	
+        	t.setBackground(new TextureRegionDrawable(tabBg));
+        	
+        	top.defaults().expandX().spaceRight(20);
+        	top.add(avatars.get(i));
+        	top.add(labels.get(i));
+        	
+        	bottom.defaults().expandX().spaceRight(20);
+        	bottom.add(icons.get(2*i));
+        	bottom.add(icons.get(2*i+1));
+        	tabs.add(bottom);
+        	
+        	t.add(top).height(120).padLeft(20).row();
+        	t.add(bottom).height(100).padRight(20);
+        	
+        	if (CardGame.debug) t.debug();
         	info.add(t);
         }
         
-        for (Table t : info) infoTable.add(t);
-        
-        /** Tab bar */
-        
-        tabTable.setBackground(new TextureRegionDrawable(bar));
-        tabTable.center();
-        
-        for (int i=0; i<8; i++) icons.add(new Image());
-        for (int i=0; i<4; i++){
-        	Table t = new Table();
-        	if (CardGame.debug) t.debug();
-        	tabTable.add(t).width(270);
-        	
-        	Table wrap = new Table();
-        	wrap.defaults().expandX().spaceRight(20);
-        	wrap.add(icons.get(2*i));
-        	wrap.add(icons.get(2*i+1));
-        	t.add(wrap);
-        	tabs.add(wrap);
-        }
+        for (Table t : info) tabTable.add(t);
         
         /** Content */
         
@@ -188,9 +197,7 @@ public class GUI extends Table implements Disposable{
         handTable.pad(40).defaults().expandX().space(10);
         
         
-        add(infoTable).fillX().height(120).minWidth(1080);
-        row();
-        add(tabTable).height(100).minWidth(1080);
+        add(tabTable).fillX().height(220).minWidth(1080);
         row();
         add(stackPane).height(800);
         row();
@@ -201,7 +208,8 @@ public class GUI extends Table implements Disposable{
 	
 	public void message(String text){
 		error.getContentTable().clear();
-		error.text(text, lStyle);
+		error.getContentTable().add(cIcon).space(100).row();
+		error.text(text, msgStyle);
 		error.show(game.stage);
 	}
 	
@@ -255,8 +263,8 @@ public class GUI extends Table implements Disposable{
 
 	@Override
 	public void dispose() {
-		atlas.dispose();
-		font.dispose();
+		defaultFont.dispose();
+		msgFont.dispose();
 	}
 	
 	

@@ -2,26 +2,33 @@ package com.eg.cards.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class CardGame extends Game{
 	
-	public final static boolean debug = true;
+	public final static boolean debug = false;
 
 	private MainMenuScreen mainMenuScreen;
 	private GameScreen gameScreen;
 	public Stage stage;
+	
+	private TextureAtlas uiResources;
 
 	@Override
 	public void create() {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		
+		uiResources = new TextureAtlas(Gdx.files.internal("ui.atlas"));
+		
 		mainMenuScreen = new MainMenuScreen(this);
 		gameScreen = new GameScreen(this);
         setScreen(mainMenuScreen);
 	}
+	
+	public TextureAtlas getUIAtlas(){ return uiResources; }
 	
 	public void toggleMainMenu(){
 		if (getScreen().equals(mainMenuScreen))
@@ -56,6 +63,7 @@ public class CardGame extends Game{
 	@Override
 	public void dispose() {	
 		stage.dispose();
+		uiResources.dispose();
 	}
 
 }

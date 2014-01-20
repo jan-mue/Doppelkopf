@@ -1,0 +1,124 @@
+
+ui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+10
+  rotate: false
+  xy: 2, 6
+  size: 67, 61
+  orig: 67, 61
+  offset: 0, 0
+  index: -1
+9
+  rotate: false
+  xy: 804, 451
+  size: 36, 61
+  orig: 36, 61
+  offset: 0, 0
+  index: -1
+ace
+  rotate: false
+  xy: 804, 514
+  size: 52, 61
+  orig: 52, 61
+  offset: 0, 0
+  index: -1
+avatar
+  rotate: false
+  xy: 516, 125
+  size: 54, 72
+  orig: 54, 72
+  offset: 0, 0
+  index: -1
+button
+  rotate: false
+  xy: 1058, 899
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
+cards
+  rotate: false
+  xy: 804, 577
+  size: 152, 200
+  orig: 152, 200
+  offset: 0, 0
+  index: -1
+club
+  rotate: false
+  xy: 1058, 837
+  size: 61, 60
+  orig: 61, 60
+  offset: 0, 0
+  index: -1
+dialog
+  rotate: false
+  xy: 2, 199
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+diamond
+  rotate: false
+  xy: 1121, 837
+  size: 44, 60
+  orig: 44, 60
+  offset: 0, 0
+  index: -1
+heart
+  rotate: false
+  xy: 958, 717
+  size: 53, 60
+  orig: 53, 60
+  offset: 0, 0
+  index: -1
+helbard
+  rotate: false
+  xy: 71, 7
+  size: 52, 60
+  orig: 52, 60
+  offset: 0, 0
+  index: -1
+king
+  rotate: false
+  xy: 1360, 939
+  size: 59, 60
+  orig: 59, 60
+  offset: 0, 0
+  index: -1
+menubutton
+  rotate: false
+  xy: 2, 69
+  size: 512, 128
+  orig: 512, 128
+  offset: 0, 0
+  index: -1
+queen
+  rotate: false
+  xy: 1421, 939
+  size: 38, 60
+  orig: 38, 60
+  offset: 0, 0
+  index: -1
+spade
+  rotate: false
+  xy: 572, 137
+  size: 46, 60
+  orig: 46, 60
+  offset: 0, 0
+  index: -1
+tab
+  rotate: false
+  xy: 804, 779
+  size: 252, 220
+  orig: 252, 220
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 2, 2
+  size: 2, 2
+  orig: 2, 2
+  offset: 0, 0
+  index: -1

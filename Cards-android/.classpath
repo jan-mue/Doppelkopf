@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path="src"/>
-    <classpathentry kind="src" path="gen"/>
-    <classpathentry combineaccessrules="false" exported="true" kind="src" path="/Cards"/>
-    <classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-    <classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-    <classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-    <classpathentry kind="output" path="bin/classes"/>
-    <classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
-    <classpathentry exported="true" kind="lib" path="/Cards/libs/bodyeditor-loader.jar" sourcepath="/Cards/libs/bodyeditor-loader-sources.jar"/>
-    <classpathentry exported="true" kind="lib" path="/Cards/libs/gdx-freetype.jar"/>
-    <classpathentry exported="true" kind="lib" path="/Cards/libs/gdx.jar" sourcepath="/Cards/libs/gdx-sources.jar"/>
-    <classpathentry exported="true" kind="lib" path="/Cards/libs/tween-engine-api.jar" sourcepath="/Cards/libs/tween-engine-api-sources.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Cards"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Cards/libs/gdx-freetype.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Cards/libs/gdx.jar" sourcepath="/Cards/libs/gdx-sources.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

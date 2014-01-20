@@ -6,11 +6,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt.jar" sourcepath="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
-	<classpathentry kind="lib" path="/Cards/libs/bodyeditor-loader-sources.jar"/>
-	<classpathentry kind="lib" path="/Cards/libs/bodyeditor-loader.jar" sourcepath="/Cards/libs/bodyeditor-loader-sources.jar"/>
 	<classpathentry kind="lib" path="/Cards/libs/gdx-sources.jar"/>
 	<classpathentry kind="lib" path="/Cards/libs/gdx.jar" sourcepath="/Cards/libs/gdx-sources.jar"/>
-	<classpathentry kind="lib" path="/Cards/libs/tween-engine-api-sources.jar"/>
-	<classpathentry kind="lib" path="/Cards/libs/tween-engine-api.jar" sourcepath="/Cards/libs/tween-engine-api-sources.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

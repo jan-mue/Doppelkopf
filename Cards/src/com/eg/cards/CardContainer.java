@@ -48,8 +48,8 @@ public class CardContainer extends Array<Card>{
 		return true;
 	}
 	
-	public void removeCard(Card card) throws IllegalArgumentException{
-		if (!removeValue(card, true)) throw new IllegalArgumentException();
+	public boolean remove(Card card) {
+		return removeValue(card, true);
 	}
 	
 	public boolean contains(final CardSuit suit, final CardSymbol symbol){
@@ -98,8 +98,10 @@ public class CardContainer extends Array<Card>{
 		return result;
 	}
 	
-	public CardContainer get(final CardSuit suit){
+	public CardContainer get(final CardSuit suit){		
 		CardContainer result=new CardContainer(count(suit));
+		if (size==0) return result;
+		
 		for (Card c : this)
 			if (c.getSuit().equals(suit)) result.add(c);
 		return result;
@@ -107,8 +109,21 @@ public class CardContainer extends Array<Card>{
 	
 	public CardContainer get(final CardSymbol symbol){
 		CardContainer result=new CardContainer(count(symbol));
+		if (size==0) return result;
+		
 		for (Card c : this)
 			if (c.getSymbol().equals(symbol)) result.add(c);
+		return result;
+	}
+	
+	public CardContainer get(final CardSuit suit, final CardSymbol symbol){
+		CardContainer result=new CardContainer(2);
+		if (size==0) return result;
+		
+		for (Card c : this)
+			if (c.getSymbol().equals(symbol) && c.getSuit().equals(suit))
+				result.add(c);
+		
 		return result;
 	}
 	

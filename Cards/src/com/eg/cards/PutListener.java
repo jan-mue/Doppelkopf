@@ -15,7 +15,7 @@ public class PutListener implements EventListener{
 		return true;
 	}
 	
-	public void put(PutEvent event, byte id){
+	public void put(PutEvent event, int id){
 	}
 
 }

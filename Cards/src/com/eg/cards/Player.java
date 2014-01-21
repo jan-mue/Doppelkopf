@@ -6,25 +6,28 @@ import com.eg.cards.ui.CardGame;
 
 public class Player extends CardContainer{
 	
-	private short points=0;
-	private final byte id;
+	private int points=0;
+	public final int id;
+	private Player partner;
 	private boolean team;
 	
-	public Player(byte id){
+	public Player(int id){
 		super(10);
 		this.id=id;
+		partner = null;
 		team = false;
 	}
 	
-	public byte getID(){ return id; }
-	public boolean isTeamRe(){ return team; }
+	public Player getPartner(){ return partner; }
+	
 	
 	public boolean playCard(final Card card, final Stack stack) throws IllegalArgumentException{
 		if (CardGame.debug) System.out.println(card + " played by " + this);
 		
 		if (!stack.check(card, this)) throw new IllegalArgumentException();
 		
-		removeCard(card);
+		if (!remove(card)) throw new IllegalArgumentException();
+		
 		try{
 			return stack.addCard(card);
 		}
@@ -60,11 +63,31 @@ public class Player extends CardContainer{
 				}
 			}
 			
-			//no ace found
+			//no (fitting) ace found
 			
-			if (trumps.size!=0)
-				return trumps.random();
+			if (trumps.size!=0){
+				CardContainer tmp = trumps.get(CardSuit.HEARTS, CardSymbol.TEN);
+				if (tmp.size==2) return tmp.first();
+				tmp = trumps.get(CardSymbol.TEN);
+				trumps.removeAll(tmp, true);
+				tmp = trumps.get(CardSymbol.ACE);
+				trumps.removeAll(tmp, true);
+				
+				if (trumps.size>0 || size==1){
+					if (trumps.contains(CardSymbol.KNAVE)){
+						trumps = trumps.get(CardSymbol.KNAVE);
+						return trumps.random();
+					}
+					else return trumps.first();
+				}
+			}
 			
+			//no (fitting) trump found
+			
+			if (colors.contains(CardSymbol.KING)){
+				colors = colors.get(CardSymbol.KING);
+				return colors.first();
+			}
 			return colors.first();
 		}
 		
@@ -85,7 +108,7 @@ public class Player extends CardContainer{
 				//Highest Card is Trump or is higher Color than all the available cards
 				if(highcard.getTrumpValue()!=0 || highcard.compareTo(colors.peek())>=0){
 					//Same team?
-					if (best.isTeamRe()==team)
+					if (best == partner)
 						//Pick card with highest value
 						return colors.peek();
 					else
@@ -99,7 +122,7 @@ public class Player extends CardContainer{
 				if (CardGame.debug) System.out.println(this+" has no Color of Suit " + suit);
 				
 				//Play color only to help partner
-				if (best.isTeamRe()==team){
+				if (best == partner){
 					
 				}
 			}
@@ -122,11 +145,11 @@ public class Player extends CardContainer{
 		return (lowest==null)? trumps.first() : lowest;
 	}
 	
-	public void addPoints(short points){
+	public void addPoints(int points){
 		this.points += Math.abs(points);
 	}
 	
-	public short getPoints(){ return points; }
+	public int getPoints(){ return points; }
 	
 	@Override
 	public boolean addCard(final Card card){

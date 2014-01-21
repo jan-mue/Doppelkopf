@@ -23,7 +23,7 @@ public class CardBuilder implements Disposable{
 		}
 	}
 	
-	public Card createCard(byte id){
+	public Card createCard(int id){
 		if (id<0 || id>39) throw new IllegalArgumentException();
 		return new Card(region[(id>19)? id-20 : id], id);
 	}

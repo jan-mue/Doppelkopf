@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
 		stack = new Stack();
 		
 		players =  new Array<Player>(4);
-		for (byte i=0; i<4; i++) players.add(new Player(i));
+		for (int i=0; i<4; i++) players.add(new Player(i));
 		
 		deck.dealCards(players);
         
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
 		
 		gui.init(loop);
 		gui.addListener(new PutListener(){
-			public void put(PutEvent event, byte id){
+			public void put(PutEvent event, int id){
 				loop.playCard(id);
 			}
 		});

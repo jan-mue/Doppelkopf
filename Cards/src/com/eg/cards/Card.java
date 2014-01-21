@@ -15,21 +15,21 @@ public class Card extends Image implements Comparable<Card>{
 	public enum CardSymbol{
 		NINE(0), KNAVE(2), QUEEN(3), KING(4), TEN(10), ACE(11);
 		
-		private byte value;
+		private int value;
 		
 		private CardSymbol(int value){
-			this.value = (byte) value;
+			this.value = value;
 		}
 		
-		public byte getValue(){ return value; }
+		public int getValue(){ return value; }
 	}
 	
-	private final byte id;
+	private final int id;
 	private CardSuit suit;
 	private CardSymbol symbol;
-	private byte trump;
+	private int trump;
 	
-	public Card(TextureRegion region, final byte id){
+	public Card(TextureRegion region, final int id){
 		super(region);
 		this.id = id;
 		
@@ -45,8 +45,7 @@ public class Card extends Image implements Comparable<Card>{
 	
 	public CardSuit getSuit(){ return suit; }
 	public CardSymbol getSymbol(){ return symbol; }
-	public byte getTrumpValue(){ return trump; }
-	public byte getID(){ return id; }
+	public int getTrumpValue(){ return trump; }
 
 	private void findType() {
 		int type = id>19? id-20 : id;

@@ -12,7 +12,7 @@ public class Deck extends CardContainer implements Disposable{
 		
 		cardBuilder = new CardBuilder();
 		
-		for (byte i=0; i<40; i++) addCard(cardBuilder.createCard(i));
+		for (int i=0; i<40; i++) addCard(cardBuilder.createCard(i));
 	}
 	
 	public void dealCards(Array<Player> players){

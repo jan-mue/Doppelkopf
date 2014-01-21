@@ -10,8 +10,8 @@ public class Stack extends CardContainer{
 		super(4);
 	}
 	
-	public short count(){
-		short pts = 0;
+	public int count(){
+		int pts = 0;
 		for (Card c : this) pts += c.getSymbol().getValue();
 		return pts;
 	}

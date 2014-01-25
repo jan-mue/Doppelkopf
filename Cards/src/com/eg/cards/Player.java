@@ -19,10 +19,14 @@ public class Player extends CardContainer{
 	}
 	
 	public Player getPartner(){ return partner; }
+	public boolean getTeamVisible(){ return team; }
 	
 	
 	public boolean playCard(final Card card, final Stack stack) throws IllegalArgumentException{
 		if (CardGame.debug) System.out.println(card + " played by " + this);
+		
+		if (card.getSymbol().equals(CardSymbol.QUEEN) && card.getSuit().equals(CardSuit.CLUBS))
+			team = true;
 		
 		if (!stack.check(card, this)) throw new IllegalArgumentException();
 		
@@ -73,22 +77,22 @@ public class Player extends CardContainer{
 				tmp = trumps.get(CardSymbol.ACE);
 				trumps.removeAll(tmp, true);
 				
-				if (trumps.size>0 || size==1){
+				if (trumps.size>0){
 					if (trumps.contains(CardSymbol.KNAVE)){
-						trumps = trumps.get(CardSymbol.KNAVE);
-						return trumps.random();
+						CardContainer knaves = trumps.get(CardSymbol.KNAVE);
+						return knaves.random();
 					}
-					else return trumps.first();
+					return trumps.first();
 				}
 			}
 			
 			//no (fitting) trump found
 			
 			if (colors.contains(CardSymbol.KING)){
-				colors = colors.get(CardSymbol.KING);
-				return colors.first();
+				CardContainer kings = colors.get(CardSymbol.KING);
+				return kings.first();
 			}
-			return colors.first();
+			if (colors.size!=0) return colors.first();
 		}
 		
 		//Play Color
@@ -150,13 +154,6 @@ public class Player extends CardContainer{
 	}
 	
 	public int getPoints(){ return points; }
-	
-	@Override
-	public boolean addCard(final Card card){
-		if (card.getSymbol().equals(CardSymbol.QUEEN) && card.getSuit().equals(CardSuit.CLUBS))
-			team = true;
-		return super.addCard(card);
-	}
 	
 	@Override
 	public void reset(){

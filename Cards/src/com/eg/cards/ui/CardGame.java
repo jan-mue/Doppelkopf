@@ -23,8 +23,8 @@ public class CardGame extends Game{
 		
 		uiResources = new TextureAtlas(Gdx.files.internal("ui.atlas"));
 		
-		mainMenuScreen = new MainMenuScreen(this);
 		gameScreen = new GameScreen(this);
+		mainMenuScreen = new MainMenuScreen(this);
         setScreen(mainMenuScreen);
 	}
 	

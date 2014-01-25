@@ -12,14 +12,14 @@ repeat: none
   index: -1
 9
   rotate: false
-  xy: 804, 451
+  xy: 958, 653
   size: 36, 61
   orig: 36, 61
   offset: 0, 0
   index: -1
 ace
   rotate: false
-  xy: 804, 514
+  xy: 958, 716
   size: 52, 61
   orig: 52, 61
   offset: 0, 0
@@ -33,7 +33,7 @@ avatar
   index: -1
 button
   rotate: false
-  xy: 1058, 899
+  xy: 1076, 899
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
@@ -47,7 +47,7 @@ cards
   index: -1
 club
   rotate: false
-  xy: 1058, 837
+  xy: 1076, 837
   size: 61, 60
   orig: 61, 60
   offset: 0, 0
@@ -61,28 +61,35 @@ dialog
   index: -1
 diamond
   rotate: false
-  xy: 1121, 837
+  xy: 572, 137
   size: 44, 60
   orig: 44, 60
   offset: 0, 0
   index: -1
+drawer
+  rotate: false
+  xy: 516, 79
+  size: 30, 44
+  orig: 30, 44
+  offset: 0, 0
+  index: -1
 heart
   rotate: false
-  xy: 958, 717
+  xy: 804, 293
   size: 53, 60
   orig: 53, 60
   offset: 0, 0
   index: -1
 helbard
   rotate: false
-  xy: 71, 7
+  xy: 902, 515
   size: 52, 60
   orig: 52, 60
   offset: 0, 0
   index: -1
 king
   rotate: false
-  xy: 1360, 939
+  xy: 1378, 939
   size: 59, 60
   orig: 59, 60
   offset: 0, 0
@@ -94,16 +101,23 @@ menubutton
   orig: 512, 128
   offset: 0, 0
   index: -1
+nav
+  rotate: false
+  xy: 804, 355
+  size: 96, 220
+  orig: 96, 220
+  offset: 0, 0
+  index: -1
 queen
   rotate: false
-  xy: 1421, 939
+  xy: 1139, 837
   size: 38, 60
   orig: 38, 60
   offset: 0, 0
   index: -1
 spade
   rotate: false
-  xy: 572, 137
+  xy: 71, 7
   size: 46, 60
   orig: 46, 60
   offset: 0, 0
@@ -111,8 +125,8 @@ spade
 tab
   rotate: false
   xy: 804, 779
-  size: 252, 220
-  orig: 252, 220
+  size: 270, 220
+  orig: 270, 220
   offset: 0, 0
   index: -1
 white

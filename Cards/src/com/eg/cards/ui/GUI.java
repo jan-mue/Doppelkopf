@@ -24,6 +24,10 @@ import com.eg.cards.GameLoop;
 
 public class GUI extends Table implements Disposable{
 	
+	public static final Color LIGHT = new Color(242/255f, 242/255f, 242/255f, 1);
+	public static final Color DARK = new Color(0.2f, 0.2f, 0.2f, 0.6f);
+	public static final Color RED = new Color(212/255f, 0, 0, 1);
+	
 	private final Table handTable, stackTable;
 	private GameLoop loop;
 	private TextureAtlas atlas;
@@ -56,11 +60,7 @@ public class GUI extends Table implements Disposable{
         msgFont = generator.generateFont(60);
         generator.dispose();
         
-	}
-	
-	public void init(GameLoop loop){
-		this.loop = loop;
-		
+
         atlas = game.getUIAtlas();
         AtlasRegion but = atlas.findRegion("button");
         AtlasRegion msgbackground = atlas.findRegion("dialog");
@@ -99,6 +99,11 @@ public class GUI extends Table implements Disposable{
         
         error.button(button);
         
+	}
+	
+	public void init(GameLoop loop){
+		this.loop = loop;
+        
         /** Tab bar */
         tabs = new TabBar(loop, atlas, defaultFont);
         
@@ -111,7 +116,7 @@ public class GUI extends Table implements Disposable{
         handTable.pad(40).defaults().expandX().space(10);
         
         
-        add(tabs).fillX().height(220).minWidth(1080);
+        add(tabs).height(220).minWidth(1080);
         row();
         add(stackPane).height(800);
         row();

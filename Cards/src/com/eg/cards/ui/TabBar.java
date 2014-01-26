@@ -4,12 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -23,15 +29,17 @@ public class TabBar extends WidgetGroup{
 	private Array<Label> labels;
 	private Array<Image> icons, avatars;
 	private Array<Table> tabs;
-	private Image nav, drawer;
-	private LabelStyle scoreStyle;
+	private ImageButton nav;
 	private Array<AtlasRegion> iconRegions;
 	private GameLoop loop;
 	
-	public TabBar(final GameLoop loop, TextureAtlas atlas, final BitmapFont font){
-		super();
+	public TabBar(final GameLoop loop, final GUI gui,
+			final CardGame game, final BitmapFont font){
+		
+		setTouchable(Touchable.enabled);
 		
 		this.loop = loop;
+		TextureAtlas atlas = game.getUIAtlas();
         
         AtlasRegion avatar = atlas.findRegion("avatar");
         AtlasRegion tabBg = atlas.findRegion("tab");
@@ -55,7 +63,7 @@ public class TabBar extends WidgetGroup{
         icons = new Array<Image>(8);
         avatars = new Array<Image>(4);
 		
-		scoreStyle = new LabelStyle();
+        LabelStyle scoreStyle = new LabelStyle();
         scoreStyle.font = font;
         scoreStyle.fontColor = Color.WHITE;
         
@@ -71,13 +79,21 @@ public class TabBar extends WidgetGroup{
         
         for (int i=0; i<8; i++) icons.add(new Image());
         
-        nav = new Image(navBg);
-        drawer = new Image(navIcon);
-        
+        ImageButtonStyle navStyle = new ImageButtonStyle();
+        Drawable bg = new TextureRegionDrawable(navBg);
+        navStyle.up = bg;
+        navStyle.down = new Skin().newDrawable(bg, GUI.LIGHT);
+        navStyle.imageUp = new TextureRegionDrawable(navIcon);
+        nav = new ImageButton(navStyle);
+        nav.left();
+        if (CardGame.debug) nav.debug();
+        nav.addListener(new ClickListener(){
+        	public void clicked(InputEvent event, float x, float y){
+        		gui.toggleMenu();
+        	}
+        });
         nav.setBounds(0, 0, 96, 220);
-        drawer.setBounds(0, 89, 30, 44);
         addActor(nav);
-        addActor(drawer);
         
         for (int i=0; i<4; i++){
         	Table tab = new Table();
@@ -104,6 +120,8 @@ public class TabBar extends WidgetGroup{
         	tabs.add(tab);
         }
 	}
+	
+	public ImageButton getNavigationButton(){ return nav; }
 	
 	public void update(){
 		for (int i=0; i<loop.getPlayers().size; i++){

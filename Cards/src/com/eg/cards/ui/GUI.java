@@ -24,7 +24,7 @@ import com.eg.cards.GameLoop;
 
 public class GUI extends Table implements Disposable{
 	
-	public static final Color LIGHT = new Color(242/255f, 242/255f, 242/255f, 1);
+	public static final Color LIGHT = new Color(237/255f, 237/255f, 237/255f, 1);
 	public static final Color DARK = new Color(0.2f, 0.2f, 0.2f, 0.6f);
 	public static final Color RED = new Color(212/255f, 0, 0, 1);
 	
@@ -36,6 +36,7 @@ public class GUI extends Table implements Disposable{
 	private Image cIcon;
 	private BitmapFont defaultFont, msgFont;
 	private TabBar tabs;
+	private Menu menu;
 	
 	private final CardGame game;
 	
@@ -45,6 +46,7 @@ public class GUI extends Table implements Disposable{
 		this.game = game;
         
         setFillParent(true);
+        setClip(true);
         if (CardGame.debug) debug();
         
         stackTable = new Table();
@@ -105,7 +107,10 @@ public class GUI extends Table implements Disposable{
 		this.loop = loop;
         
         /** Tab bar */
-        tabs = new TabBar(loop, atlas, defaultFont);
+        tabs = new TabBar(loop, this, game, defaultFont);
+        
+        menu = new Menu(game, this, tabs);
+        menu.setSize(300, 1700);
         
         /** Content */
         
@@ -116,13 +121,18 @@ public class GUI extends Table implements Disposable{
         handTable.pad(40).defaults().expandX().space(10);
         
         
-        add(tabs).height(220).minWidth(1080);
+        add(tabs).height(220).minWidth(1080).left();
         row();
         add(stackPane).height(800);
         row();
         add(handPane).height(900);
         
         update();
+	}
+	
+	public void toggleMenu(){
+		if (menu.hasParent()) menu.hide();
+		else menu.show();
 	}
 	
 	public void message(String text){

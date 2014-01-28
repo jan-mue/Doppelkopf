@@ -110,7 +110,6 @@ public class GUI extends Table implements Disposable{
         tabs = new TabBar(loop, this, game, defaultFont);
         
         menu = new Menu(game, this, tabs);
-        menu.setSize(300, 1700);
         
         /** Content */
         

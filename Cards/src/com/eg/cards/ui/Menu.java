@@ -2,7 +2,9 @@ package com.eg.cards.ui;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,17 +13,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Menu extends Table{
-	private CardGame game;
-	private GUI gui;
-	private TabBar tabs;
-	private Image nav;
+	private final CardGame game;
+	private final GUI gui;
+	private final TabBar tabs;
+	private final Image nav, cover;
 	
-	public static float moveDuration = 0.1f;
+	private ImageButton back, replay, settings, help;
+	
+	public static float duration = 0.1f;
 	private Actor previousKeyboardFocus, previousScrollFocus;
 	private InputListener ignoreTouchDown = new InputListener() {
 		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -30,7 +39,7 @@ public class Menu extends Table{
 		}
 	};
 	
-	public Menu(CardGame game, GUI gui, TabBar tabs){
+	public Menu(final CardGame game, final GUI gui, TabBar tabs){
 		this.gui = gui;
 		this.game = game;
 		
@@ -40,9 +49,70 @@ public class Menu extends Table{
 		if (CardGame.debug) debug();
 		
 		setTouchable(Touchable.enabled);
+		center();
 		
-		AtlasRegion bg = game.getUIAtlas().findRegion("white");
-		setBackground(new TextureRegionDrawable(bg));
+		AtlasRegion white = game.getUIAtlas().findRegion("white");
+		AtlasRegion backRegion = game.getUIAtlas().findRegion("menu");
+		AtlasRegion replayRegion = game.getUIAtlas().findRegion("replay");
+		AtlasRegion settingsRegion = game.getUIAtlas().findRegion("settings");
+		AtlasRegion helpRegion = game.getUIAtlas().findRegion("help");
+		
+		TextureRegionDrawable bg = new TextureRegionDrawable(white);
+		Drawable bgDown = new Skin().newDrawable(bg, GUI.LIGHT);
+		
+		setBackground(new TextureRegionDrawable(white));
+		setSize(300, 1700);	
+		
+		ImageButtonStyle backStyle = new ImageButtonStyle();
+		TextureRegionDrawable backIcon = new TextureRegionDrawable(backRegion);
+		backStyle.up = bg;
+		backStyle.down = bgDown;
+		backStyle.imageUp = new TextureRegionDrawable(backIcon);
+		
+		ImageButtonStyle replayStyle = new ImageButtonStyle();
+		TextureRegionDrawable replayIcon = new TextureRegionDrawable(replayRegion);
+		replayStyle.up = bg;
+		replayStyle.down = bgDown;
+		replayStyle.imageUp = new TextureRegionDrawable(replayIcon);
+		
+		ImageButtonStyle settingsStyle = new ImageButtonStyle();
+		TextureRegionDrawable settingsIcon = new TextureRegionDrawable(settingsRegion);
+		settingsStyle.up = bg;
+		settingsStyle.down = bgDown;
+		settingsStyle.imageUp = new TextureRegionDrawable(settingsIcon);
+		
+		ImageButtonStyle helpStyle = new ImageButtonStyle();
+		TextureRegionDrawable helpIcon = new TextureRegionDrawable(helpRegion);
+		helpStyle.up = bg;
+		helpStyle.down = bgDown;
+		helpStyle.imageUp = new TextureRegionDrawable(helpIcon);
+		
+		back = new ImageButton(backStyle);
+		back.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+        		game.toggleMainMenu();
+        	}
+		});
+		replay = new ImageButton(replayStyle);
+		settings = new ImageButton(settingsStyle);
+		help = new ImageButton(helpStyle);
+		
+		add(back).size(300, 300);
+		row();
+		add(replay).size(300, 300);
+		row();
+		add(settings).size(300, 300);
+		row();
+		add(help).size(300, 300);
+		
+		cover = new Image(bg);
+		cover.setColor(Color.BLACK);
+		cover.setSize(1080, 1710);
+		cover.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+        		gui.toggleMenu();
+        	}
+		});
 		
 		addListener(new FocusListener() {
 			public void keyboardFocusChanged (FocusEvent event, Actor actor, boolean focused) {
@@ -66,7 +136,10 @@ public class Menu extends Table{
 	
 	public void show(){
 		clearActions();
+		cover.clearActions();
+		nav.clearActions();
 		removeCaptureListener(ignoreTouchDown);
+		cover.removeCaptureListener(ignoreTouchDown);
 
 		previousKeyboardFocus = null;
 		Actor actor = game.stage.getKeyboardFocus();
@@ -78,29 +151,42 @@ public class Menu extends Table{
 
 		//pack();
 		setPosition(-300, 0);
+		cover.setPosition(0, 0);
+		gui.addActor(cover);
 		gui.addActor(this);
 		game.stage.setKeyboardFocus(this);
 		game.stage.setScrollFocus(this);
-		if (moveDuration > 0){
-			nav.addAction(Actions.moveBy(-nav.getWidth()/2, 0, moveDuration));
-			addAction(Actions.moveBy(300, 0, moveDuration));
+		if (duration > 0){
+			nav.addAction(Actions.moveBy(-nav.getWidth()/2, 0, duration));
+			cover.getColor().a = 0;
+			cover.addAction(Actions.parallel(Actions.alpha(0.6f, duration, Interpolation.fade), Actions.moveBy(300, 0, duration)));
+			addAction(Actions.moveBy(300, 0, duration));
 		}
 		else setPosition(0, 0);
 	}
 	
 	public void hide(){
-		if (moveDuration > 0) {
+		if (duration > 0 && gui.hasParent()) {
 			addCaptureListener(ignoreTouchDown);
-			nav.addAction(Actions.moveBy(nav.getWidth()/2, 0, moveDuration));
-			addAction(sequence(Actions.moveBy(-300, 0, moveDuration), Actions.removeListener(ignoreTouchDown, true),
+			cover.addCaptureListener(ignoreTouchDown);
+			nav.addAction(Actions.moveBy(nav.getWidth()/2, 0, duration));
+			cover.addAction(sequence(Actions.parallel(Actions.fadeOut(duration, Interpolation.fade), Actions.moveBy(-300, 0, duration)),
+					Actions.removeListener(ignoreTouchDown, true),
+					Actions.removeActor()));
+			addAction(sequence(Actions.moveBy(-300, 0, duration), Actions.removeListener(ignoreTouchDown, true),
 				Actions.removeActor()));
-		} else remove();
+		} else{
+			nav.setX(nav.getX()+nav.getWidth()/2);
+			cover.remove();
+			remove();
+		}
 	}
 	
 	@Override
 	public Actor hit (float x, float y, boolean touchable) {
 		Actor hit = super.hit(x, y, touchable);
-		if (tabs.hit(x+getX()-tabs.getX(), y+getY()-tabs.getY(), touchable) != null) return null;
+		if (tabs.hit(x+getX()-tabs.getX(), y+getY()-tabs.getY(), touchable) != null ||
+				cover.hit(x+getX()-cover.getX(), y+getY()-cover.getY(), touchable) != null) return null;
 		if (hit == null  && (!touchable || getTouchable() == Touchable.enabled)) return this;
 		return hit;
 	}

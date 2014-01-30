@@ -107,12 +107,14 @@ public class Menu extends Table{
 		
 		cover = new Image(bg);
 		cover.setColor(Color.BLACK);
-		cover.setSize(1080, 1710);
+		cover.setBounds(300, 0, 1080, 1700);
 		cover.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
         		gui.toggleMenu();
         	}
 		});
+		
+		addActor(cover);
 		
 		addListener(new FocusListener() {
 			public void keyboardFocusChanged (FocusEvent event, Actor actor, boolean focused) {
@@ -139,7 +141,6 @@ public class Menu extends Table{
 		cover.clearActions();
 		nav.clearActions();
 		removeCaptureListener(ignoreTouchDown);
-		cover.removeCaptureListener(ignoreTouchDown);
 
 		previousKeyboardFocus = null;
 		Actor actor = game.stage.getKeyboardFocus();
@@ -151,15 +152,13 @@ public class Menu extends Table{
 
 		//pack();
 		setPosition(-300, 0);
-		cover.setPosition(0, 0);
-		gui.addActor(cover);
 		gui.addActor(this);
 		game.stage.setKeyboardFocus(this);
 		game.stage.setScrollFocus(this);
 		if (duration > 0){
 			nav.addAction(Actions.moveBy(-nav.getWidth()/2, 0, duration));
 			cover.getColor().a = 0;
-			cover.addAction(Actions.parallel(Actions.alpha(0.6f, duration, Interpolation.fade), Actions.moveBy(300, 0, duration)));
+			cover.addAction(Actions.alpha(0.6f, duration, Interpolation.fade));
 			addAction(Actions.moveBy(300, 0, duration));
 		}
 		else setPosition(0, 0);
@@ -168,16 +167,12 @@ public class Menu extends Table{
 	public void hide(){
 		if (duration > 0 && gui.hasParent()) {
 			addCaptureListener(ignoreTouchDown);
-			cover.addCaptureListener(ignoreTouchDown);
 			nav.addAction(Actions.moveBy(nav.getWidth()/2, 0, duration));
-			cover.addAction(sequence(Actions.parallel(Actions.fadeOut(duration, Interpolation.fade), Actions.moveBy(-300, 0, duration)),
-					Actions.removeListener(ignoreTouchDown, true),
-					Actions.removeActor()));
+			cover.addAction(Actions.fadeOut(duration, Interpolation.fade));
 			addAction(sequence(Actions.moveBy(-300, 0, duration), Actions.removeListener(ignoreTouchDown, true),
 				Actions.removeActor()));
 		} else{
 			nav.setX(nav.getX()+nav.getWidth()/2);
-			cover.remove();
 			remove();
 		}
 	}
@@ -185,8 +180,7 @@ public class Menu extends Table{
 	@Override
 	public Actor hit (float x, float y, boolean touchable) {
 		Actor hit = super.hit(x, y, touchable);
-		if (tabs.hit(x+getX()-tabs.getX(), y+getY()-tabs.getY(), touchable) != null ||
-				cover.hit(x+getX()-cover.getX(), y+getY()-cover.getY(), touchable) != null) return null;
+		if (tabs.hit(x+getX()-tabs.getX(), y+getY()-tabs.getY(), touchable) != null) return null;
 		if (hit == null  && (!touchable || getTouchable() == Touchable.enabled)) return this;
 		return hit;
 	}

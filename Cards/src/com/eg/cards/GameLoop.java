@@ -1,35 +1,36 @@
 package com.eg.cards;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.eg.cards.ui.CardGame;
 import com.eg.cards.ui.GUI;
 
-public class GameLoop{
+public class GameLoop implements Disposable{
 	
 	private final Deck deck;
 	private final Stack stack;
 	private final Array<Player> players;
 	
-	private final GUI gui;
+	private GUI gui;
 	
-	private int start = 4;
+	private int start;
 	private Player best;
 	private boolean continued;
 	
-	public GameLoop(Deck deck, Stack stack, Array<Player> players, GUI gui){
-		super();
-		this.deck=deck;
-		this.stack=stack;
-		this.players=players;
-		this.gui=gui;
-		
-		best=players.first();
-		continued=true;
+	public GameLoop(){	
+		deck = new Deck();
+		stack = new Stack();		
+		players =  new Array<Player>(4);
+		for (int i=0; i<4; i++) players.add(new Player(i));
 	}
 	
 	public int getStartPlayer(){ return (start==4)? 0 : start; }
 	public Array<Player> getPlayers(){ return new Array<Player>(players); }
 	public CardContainer getStack(){ return new CardContainer(stack); }
+	
+	public void setGUI(GUI gui){
+		if (gui != null) this.gui = gui;
+	}
 	
 	public void playCard(int id){
 		if (!continued){
@@ -77,11 +78,28 @@ public class GameLoop{
 		continued=true;
 	}
 	
+	public void start(){
+		stack.reset();
+		for (Player p : players) p.reset();
+		
+		start = 4;
+		best=players.first();
+		continued=true;
+		deck.dealCards(players);
+		
+		gui.update();
+	}
+	
 	private void play(Player p){
 		if (p.playCard(stack, best)){
 			best = p;
 			if (CardGame.debug) System.out.println(p+" played a higher card");
 		}
+	}
+
+	@Override
+	public void dispose() {
+		deck.dispose();
 	}
 
 }

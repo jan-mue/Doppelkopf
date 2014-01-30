@@ -29,21 +29,22 @@ public class GUI extends Table implements Disposable{
 	public static final Color RED = new Color(212/255f, 0, 0, 1);
 	
 	private final Table handTable, stackTable;
-	private GameLoop loop;
-	private TextureAtlas atlas;
-	private Dialog error;
-	private LabelStyle msgStyle;
-	private Image cIcon;
-	private BitmapFont defaultFont, msgFont;
-	private TabBar tabs;
-	private Menu menu;
+	private final TextureAtlas atlas;
+	private final Dialog error;
+	private final LabelStyle msgStyle;
+	private final Image cIcon;
+	private final BitmapFont defaultFont, msgFont;
+	private final TabBar tabs;
+	private final Menu menu;
 	
+	private final GameLoop loop;
 	private final CardGame game;
 	
-	public GUI(CardGame game){
+	public GUI(CardGame game, GameLoop loop){
 		super();
 		
 		this.game = game;
+		this.loop = loop;
         
         setFillParent(true);
         setClip(true);
@@ -101,11 +102,6 @@ public class GUI extends Table implements Disposable{
         
         error.button(button);
         
-	}
-	
-	public void init(GameLoop loop){
-		this.loop = loop;
-        
         /** Tab bar */
         tabs = new TabBar(loop, this, game, defaultFont);
         
@@ -127,7 +123,10 @@ public class GUI extends Table implements Disposable{
         add(handPane).height(900);
         
         update();
+        
 	}
+	
+	public GameLoop getLoop() { return loop; }
 	
 	public void toggleMenu(){
 		if (menu.hasParent()) menu.hide();

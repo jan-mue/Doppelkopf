@@ -134,6 +134,9 @@ public class TabBar extends WidgetGroup{
 				icons.get(2*i+1).setColor(Color.WHITE);
 			}
 			else{
+				tabs.get(i).setColor(Color.WHITE);
+				labels.get(i).setColor(Color.BLACK);
+				avatars.get(i).setColor(Color.BLACK);
 				icons.get(2*i).setColor(Color.BLACK);
 				icons.get(2*i+1).setColor(Color.BLACK);
 			}

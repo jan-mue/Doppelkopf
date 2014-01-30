@@ -158,7 +158,9 @@ public class Player extends CardContainer{
 	@Override
 	public void reset(){
 		super.reset();
-		points=0;
+		points=0;		
+		partner = null;
+		team = false;
 	}
 	
 	@Override

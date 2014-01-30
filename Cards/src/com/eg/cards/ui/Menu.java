@@ -91,9 +91,15 @@ public class Menu extends Table{
 		back.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
         		game.toggleMainMenu();
+        		gui.toggleMenu();
         	}
 		});
 		replay = new ImageButton(replayStyle);
+		replay.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+        		gui.getLoop().start();
+        	}
+		});
 		settings = new ImageButton(settingsStyle);
 		help = new ImageButton(helpStyle);
 		

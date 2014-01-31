@@ -47,7 +47,7 @@ public class LoadingIndicator extends Table{
 	}
 	
 	public void update(){
-		progress.setText(Math.round(game.getAssets().getProgress()*100)+" % Loading");
+		progress.setText(Math.round(game.getAssets().getProgress()*100)+"% geladen");
 	}
 
 }

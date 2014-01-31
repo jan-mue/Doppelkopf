@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.eg.cards.GameLoop;
-import com.eg.cards.PutEvent;
-import com.eg.cards.PutListener;
 
 public class GameScreen implements Screen {
 	
@@ -17,13 +15,8 @@ public class GameScreen implements Screen {
 		
 		this.game = game;
 		
-		loop = new GameLoop();
+		loop = new GameLoop(game);
         gui = new GUI(game, loop);
-		gui.addListener(new PutListener(){
-			public void put(PutEvent event, int id){
-				loop.playCard(id);
-			}
-		});
 		loop.setGUI(gui);
 	}
 
@@ -60,6 +53,5 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		gui.dispose();
-		loop.dispose();
 	}
 }

@@ -28,9 +28,11 @@ public class Player extends CardContainer{
 		if (card.getSymbol().equals(CardSymbol.QUEEN) && card.getSuit().equals(CardSuit.CLUBS))
 			team = true;
 		
-		if (!stack.check(card, this)) throw new IllegalArgumentException();
+		if (!stack.check(card, this)) 
+			throw new IllegalArgumentException();
 		
-		if (!remove(card)) throw new IllegalArgumentException();
+		if (!remove(card)) 
+			throw new IllegalArgumentException();
 		
 		try{
 			return stack.addCard(card);

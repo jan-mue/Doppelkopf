@@ -3,6 +3,7 @@ package com.eg.cards.ui;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -51,11 +52,13 @@ public class Menu extends Table{
 		setTouchable(Touchable.enabled);
 		center();
 		
-		AtlasRegion white = game.getUIAtlas().findRegion("white");
-		AtlasRegion backRegion = game.getUIAtlas().findRegion("menu");
-		AtlasRegion replayRegion = game.getUIAtlas().findRegion("replay");
-		AtlasRegion settingsRegion = game.getUIAtlas().findRegion("settings");
-		AtlasRegion helpRegion = game.getUIAtlas().findRegion("help");
+		TextureAtlas atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
+		
+		AtlasRegion white = atlas.findRegion("white");
+		AtlasRegion backRegion = atlas.findRegion("menu");
+		AtlasRegion replayRegion = atlas.findRegion("replay");
+		AtlasRegion settingsRegion = atlas.findRegion("settings");
+		AtlasRegion helpRegion = atlas.findRegion("help");
 		
 		TextureRegionDrawable bg = new TextureRegionDrawable(white);
 		Drawable bgDown = new Skin().newDrawable(bg, GUI.LIGHT);

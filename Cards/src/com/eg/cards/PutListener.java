@@ -10,12 +10,12 @@ public class PutListener implements EventListener{
 		if (!(e instanceof PutEvent)) return false;
 		PutEvent event = (PutEvent) e;
 		
-		put(event, event.getID());
+		put(event.getCard());
 		
 		return true;
 	}
 	
-	public void put(PutEvent event, int id){
+	public void put(Card card){
 	}
 
 }

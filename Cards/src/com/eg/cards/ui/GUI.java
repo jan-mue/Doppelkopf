@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 import com.eg.cards.Card;
 import com.eg.cards.GameLoop;
+import com.eg.cards.PutListener;
 
 public class GUI extends Table implements Disposable{
 	
@@ -40,7 +41,7 @@ public class GUI extends Table implements Disposable{
 	private final GameLoop loop;
 	private final CardGame game;
 	
-	public GUI(CardGame game, GameLoop loop){
+	public GUI(final CardGame game, final GameLoop loop){
 		super();
 		
 		this.game = game;
@@ -53,6 +54,12 @@ public class GUI extends Table implements Disposable{
         stackTable = new Table();
 		handTable = new Table();
 		
+		addListener(new PutListener(){
+			public void put(Card card){
+				loop.playCard(card);
+			}
+		});
+		
 		FreeTypeFontGenerator generator =
         		new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
 		defaultFont = generator.generateFont(60);
@@ -64,7 +71,7 @@ public class GUI extends Table implements Disposable{
         generator.dispose();
         
 
-        atlas = game.getUIAtlas();
+        atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
         AtlasRegion but = atlas.findRegion("button");
         AtlasRegion msgbackground = atlas.findRegion("dialog");
         AtlasRegion cards = atlas.findRegion("cards");

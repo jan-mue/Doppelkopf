@@ -2,6 +2,7 @@ package com.eg.cards.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,25 +11,29 @@ public class CardGame extends Game{
 	
 	public final static boolean debug = false;
 
+	private LoadScreen loadScreen;
 	private MainMenuScreen mainMenuScreen;
 	private GameScreen gameScreen;
 	public Stage stage;
 	
-	private TextureAtlas uiResources;
+	private AssetManager manager;
+	private boolean loaded;
 
 	@Override
 	public void create() {
+		manager = new AssetManager();
+		manager.load("ui.atlas", TextureAtlas.class);
+		manager.load("cards.atlas", TextureAtlas.class);
+		loaded = false;
+		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		
-		uiResources = new TextureAtlas(Gdx.files.internal("ui.atlas"));
-		
-		gameScreen = new GameScreen(this);
-		mainMenuScreen = new MainMenuScreen(this);
-        setScreen(mainMenuScreen);
+		loadScreen = new LoadScreen(this);
+		setScreen(loadScreen);
 	}
 	
-	public TextureAtlas getUIAtlas(){ return uiResources; }
+	public AssetManager getAssets(){ return manager; }
 	
 	public void toggleMainMenu(){
 		if (getScreen().equals(mainMenuScreen))
@@ -39,6 +44,13 @@ public class CardGame extends Game{
 	@Override
 	public void render() {		
 		super.render();
+		
+		if(manager.update() && !loaded) {
+			gameScreen = new GameScreen(this);
+			mainMenuScreen = new MainMenuScreen(this);
+			setScreen(mainMenuScreen);
+			loaded = true;
+		}
 		
 		stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -63,7 +75,7 @@ public class CardGame extends Game{
 	@Override
 	public void dispose() {	
 		stage.dispose();
-		uiResources.dispose();
+		manager.dispose();
 	}
 
 }

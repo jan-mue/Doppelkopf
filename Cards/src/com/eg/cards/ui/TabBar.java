@@ -39,7 +39,7 @@ public class TabBar extends WidgetGroup{
 		setTouchable(Touchable.enabled);
 		
 		this.loop = loop;
-		TextureAtlas atlas = game.getUIAtlas();
+		TextureAtlas atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
         
         AtlasRegion avatar = atlas.findRegion("avatar");
         AtlasRegion tabBg = atlas.findRegion("tab");
@@ -160,24 +160,25 @@ public class TabBar extends WidgetGroup{
 	private Drawable findSuit(Card card){
 		if (card.getSuit().equals(CardSuit.CLUBS))
 			return new TextureRegionDrawable(iconRegions.get(6));
-		else if (card.getSuit().equals(CardSuit.SPADES))
+		if (card.getSuit().equals(CardSuit.SPADES))
 			return new TextureRegionDrawable(iconRegions.get(7));
-		else if (card.getSuit().equals(CardSuit.HEARTS))
+		if (card.getSuit().equals(CardSuit.HEARTS))
 			return new TextureRegionDrawable(iconRegions.get(8));
 		return new TextureRegionDrawable(iconRegions.get(9));
 	}
 	
 	private Drawable findSymbol(Card card){
+		if (card.getSymbol().equals(CardSymbol.NINE))
+			return new TextureRegionDrawable(iconRegions.get(0));
 		if (card.getSymbol().equals(CardSymbol.TEN))
 			return new TextureRegionDrawable(iconRegions.get(1));
-		else if (card.getSymbol().equals(CardSymbol.ACE))
+		if (card.getSymbol().equals(CardSymbol.ACE))
 			return new TextureRegionDrawable(iconRegions.get(2));
-		else if (card.getSymbol().equals(CardSymbol.KNAVE))
+		if (card.getSymbol().equals(CardSymbol.KNAVE))
 			return new TextureRegionDrawable(iconRegions.get(3));
-		else if (card.getSymbol().equals(CardSymbol.KING))
+		if (card.getSymbol().equals(CardSymbol.KING))
 			return new TextureRegionDrawable(iconRegions.get(4));
-		else
-			return new TextureRegionDrawable(iconRegions.get(5));
+		return new TextureRegionDrawable(iconRegions.get(5));
 	}
 
 }

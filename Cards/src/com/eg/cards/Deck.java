@@ -1,18 +1,26 @@
 package com.eg.cards;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
+import com.eg.cards.Card.CardSymbol;
+import com.eg.cards.ui.CardGame;
 
-public class Deck extends CardContainer implements Disposable{
+public class Deck extends CardContainer{
 	
-	private final CardBuilder cardBuilder;
+	private final TextureAtlas cards;
 
-	public Deck() {
-		super(40);
+	public Deck(final CardGame game) {
+		super(48);
 		
-		cardBuilder = new CardBuilder();
+		cards = game.getAssets().get("cards.atlas", TextureAtlas.class);
 		
-		for (int i=0; i<40; i++) addCard(cardBuilder.createCard(i));
+		for (int i=0; i<24; i++) {
+			addCard(new Card(cards.getRegions().get(i)));
+			addCard(new Card(cards.getRegions().get(i)));
+		}
+		CardContainer nines = get(CardSymbol.NINE);
+		
+		removeAll(nines, true);
 	}
 	
 	public void dealCards(Array<Player> players){
@@ -29,11 +37,6 @@ public class Deck extends CardContainer implements Disposable{
 			}
 			p.sort();
 		}
-	}
-
-	@Override
-	public void dispose() {
-		cardBuilder.dispose();		
 	}
 
 }

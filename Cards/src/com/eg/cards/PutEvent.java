@@ -4,12 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 
 public class PutEvent extends Event{
 	
-	private final int id;
+	private final Card card;
 	
-	public PutEvent(int id){
-		this.id = id;
+	public PutEvent(Card card){
+		this.card = card;
 	}
 	
-	public int getID(){ return id; }
+	public Card getCard(){ return card; }
 
 }

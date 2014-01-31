@@ -1,11 +1,10 @@
 package com.eg.cards;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.eg.cards.ui.CardGame;
 import com.eg.cards.ui.GUI;
 
-public class GameLoop implements Disposable{
+public class GameLoop {
 	
 	private final Deck deck;
 	private final Stack stack;
@@ -17,8 +16,8 @@ public class GameLoop implements Disposable{
 	private Player best;
 	private boolean continued;
 	
-	public GameLoop(){	
-		deck = new Deck();
+	public GameLoop(CardGame game){
+		deck = new Deck(game);
 		stack = new Stack();		
 		players =  new Array<Player>(4);
 		for (int i=0; i<4; i++) players.add(new Player(i));
@@ -32,14 +31,14 @@ public class GameLoop implements Disposable{
 		if (gui != null) this.gui = gui;
 	}
 	
-	public void playCard(int id){
+	public void playCard(Card card){
 		if (!continued){
 			nextTrick();
 			return;
 		}
 		
 		try{
-		if (players.first().playCard(deck.get(id), stack)){
+		if (players.first().playCard(card, stack)){
 			best = players.first();
 			if (CardGame.debug) System.out.println("I played a higher card");
 		}
@@ -79,8 +78,7 @@ public class GameLoop implements Disposable{
 	}
 	
 	public void start(){
-		stack.reset();
-		for (Player p : players) p.reset();
+		stack.reset(); 
 		
 		start = 4;
 		best=players.first();
@@ -95,11 +93,6 @@ public class GameLoop implements Disposable{
 			best = p;
 			if (CardGame.debug) System.out.println(p+" played a higher card");
 		}
-	}
-
-	@Override
-	public void dispose() {
-		deck.dispose();
 	}
 
 }

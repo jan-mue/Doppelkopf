@@ -27,7 +27,7 @@ public class MainMenu extends Table{
 		setFillParent(true);
 		if (CardGame.debug) debug();
 		
-		atlas = game.getUIAtlas();
+		atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
         AtlasRegion region = atlas.findRegion("menubutton");
 		
 		FreeTypeFontGenerator generator =

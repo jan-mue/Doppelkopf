@@ -62,10 +62,10 @@ public class Card extends Image implements Comparable<Card>{
 	}
 	
 	private int findTrump(){
-		if (suit == CardSuit.DIAMONDS) return 1;
 		if (symbol == CardSymbol.KNAVE) return 2;
 		if (symbol == CardSymbol.QUEEN) return 3;
 		if (symbol == CardSymbol.TEN && suit == CardSuit.HEARTS) return 4;
+		if (suit == CardSuit.DIAMONDS) return 1;
 		return 0;
 	}
 	

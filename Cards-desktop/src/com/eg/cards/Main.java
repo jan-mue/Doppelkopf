@@ -7,10 +7,10 @@ import com.eg.cards.ui.CardGame;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "Cards";
+		cfg.title = "Doko";
 		cfg.useGL20 = false;
-		cfg.width = 1280;
-		cfg.height = 720;
+		cfg.width = 360;
+		cfg.height = 640;
 		
 		new LwjglApplication(new CardGame(), cfg);
 	}

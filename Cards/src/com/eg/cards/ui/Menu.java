@@ -101,6 +101,7 @@ public class Menu extends Table{
 		replay.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
         		gui.getLoop().start();
+        		gui.toggleMenu();
         	}
 		});
 		settings = new ImageButton(settingsStyle);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -32,10 +33,14 @@ public class MainMenu extends Table{
 		
 		FreeTypeFontGenerator generator =
         		new FreeTypeFontGenerator(Gdx.files.internal("fonts/dosis.medium.ttf"));
-        titleFont = generator.generateFont(150);
+		FreeTypeFontParameter titleParam = new FreeTypeFontParameter();
+		titleParam.size = 150;
+        titleFont = generator.generateFont(titleParam);
         generator.dispose();
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/RobotoCondensed-Regular.ttf"));
-        font = generator.generateFont(80);
+        FreeTypeFontParameter param = new FreeTypeFontParameter();
+        param.size = 80;
+        font = generator.generateFont(param);
         generator.dispose();
 		
 		LabelStyle style = new LabelStyle();

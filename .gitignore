@@ -13,7 +13,6 @@
 *.apk
 
 bin/
-war/
 .settings/
 target/
 obj/

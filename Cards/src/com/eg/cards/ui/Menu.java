@@ -151,6 +151,7 @@ public class Menu extends Table{
 		cover.clearActions();
 		nav.clearActions();
 		removeCaptureListener(ignoreTouchDown);
+		nav.removeCaptureListener(ignoreTouchDown);
 
 		previousKeyboardFocus = null;
 		Actor actor = game.stage.getKeyboardFocus();
@@ -177,7 +178,8 @@ public class Menu extends Table{
 	public void hide(){
 		if (duration > 0 && gui.hasParent()) {
 			addCaptureListener(ignoreTouchDown);
-			nav.addAction(Actions.moveBy(nav.getWidth()/2, 0, duration));
+			nav.addCaptureListener(ignoreTouchDown);
+			nav.addAction(sequence(Actions.moveBy(nav.getWidth()/2, 0, duration), Actions.removeListener(ignoreTouchDown, true)));
 			cover.addAction(Actions.fadeOut(duration, Interpolation.fade));
 			addAction(sequence(Actions.moveBy(-300, 0, duration), Actions.removeListener(ignoreTouchDown, true),
 				Actions.removeActor()));

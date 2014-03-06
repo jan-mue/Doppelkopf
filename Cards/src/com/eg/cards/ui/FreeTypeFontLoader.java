@@ -21,6 +21,7 @@ public class FreeTypeFontLoader extends AsynchronousAssetLoader<BitmapFont, Free
 	FreeTypeFontParameter param;
 	FreeTypeFontGenerator generator;
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Array<AssetDescriptor> getDependencies (String fileName, FileHandle file, FontParameter parameter) {
 		return null;

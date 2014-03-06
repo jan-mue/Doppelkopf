@@ -15,7 +15,7 @@ public class PutListener implements EventListener{
 		return true;
 	}
 	
-	public void put(Card card){
+	public void put(ImageCard card){
 	}
 
 }

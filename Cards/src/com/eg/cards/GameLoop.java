@@ -7,38 +7,38 @@ import com.eg.cards.ui.GUI;
 public class GameLoop {
 	
 	private final Deck deck;
-	private final Stack stack;
-	private final Array<Player> players;
+	private final Stack<ImageCard> stack;
+	private final Array<Player<ImageCard>> players;
 	
 	private GUI gui;
 	
 	private int start;
-	private Player best;
+	private Player<ImageCard> best;
 	private boolean continued;
 	
 	public GameLoop(CardGame game){
 		deck = new Deck(game);
-		stack = new Stack();		
-		players =  new Array<Player>(4);
-		for (int i=0; i<4; i++) players.add(new Player(i));
+		stack = new Stack<ImageCard>();		
+		players =  new Array<Player<ImageCard>>(4);
+		for (int i=0; i<4; i++) players.add(new Player<ImageCard>(i));
 	}
 	
 	public int getStartPlayer(){ return (start==4)? 0 : start; }
-	public Array<Player> getPlayers(){ return new Array<Player>(players); }
-	public CardContainer getStack(){ return new CardContainer(stack); }
+	public Array<Player<ImageCard>> getPlayers(){ return new Array<Player<ImageCard>>(players); }
+	public CardContainer<ImageCard> getStack(){ return new CardContainer<ImageCard>(stack); }
 	
 	public void setGUI(GUI gui){
 		if (gui != null) this.gui = gui;
 	}
 	
-	public void playCard(Card card){
+	public void input(ImageCard card){
 		if (!continued){
 			nextTrick();
 			return;
 		}
 		
 		try{
-		if (players.first().playCard(card, stack)){
+		if (players.first().play(card, stack)){
 			best = players.first();
 			if (CardGame.debug) System.out.println("I played a higher card");
 		}
@@ -48,8 +48,7 @@ public class GameLoop {
 			return;
 		}
 		
-		if (start==0) start=4;
-		for (int i=1; i<start; i++) play(players.get(i));
+		loop(1, start!=0 ? start : 4);
 		
 		gui.update();
 		
@@ -60,7 +59,18 @@ public class GameLoop {
 		
 	}
 	
-	public void nextTrick(){
+	public void start(){
+		stack.reset(); 
+		
+		start = 0;
+		best=players.first();
+		continued=true;
+		deck.dealCards(players);
+		
+		gui.update();
+	}
+	
+	private void nextTrick(){
 		
 		//Best player gets points of the trick
 		best.addPoints(stack.count());
@@ -70,28 +80,19 @@ public class GameLoop {
 		if (players.first().size==0){
 			if (CardGame.debug) System.out.println("End of game");
 		}else if (start!=0)
-			for (int i=start; i<4; i++) play(players.get(i));
+			loop(start, 4);
 		
 		gui.update();
 		
 		continued=true;
 	}
 	
-	public void start(){
-		stack.reset(); 
-		
-		start = 4;
-		best=players.first();
-		continued=true;
-		deck.dealCards(players);
-		
-		gui.update();
-	}
-	
-	private void play(Player p){
-		if (p.playCard(stack, best)){
-			best = p;
-			if (CardGame.debug) System.out.println(p+" played a higher card");
+	private void loop(final int start, final int end){
+		for (int i=start; i<end; i++){
+			if (players.get(i).play(stack, best)){
+				best = players.get(i);
+				if (CardGame.debug) System.out.println(players.get(i)+" played a higher card");
+			}
 		}
 	}
 

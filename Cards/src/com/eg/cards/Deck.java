@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.eg.cards.Card.CardSymbol;
 import com.eg.cards.ui.CardGame;
 
-public class Deck extends CardContainer{
+public class Deck extends CardContainer<ImageCard>{
 	
 	private final TextureAtlas cards;
 
@@ -15,23 +15,23 @@ public class Deck extends CardContainer{
 		cards = game.getAssets().get("cards.atlas", TextureAtlas.class);
 		
 		for (int i=0; i<24; i++) {
-			addCard(new Card(cards.getRegions().get(i)));
-			addCard(new Card(cards.getRegions().get(i)));
+			addCard(new ImageCard(cards.getRegions().get(i)));
+			addCard(new ImageCard(cards.getRegions().get(i)));
 		}
-		CardContainer nines = get(CardSymbol.NINE);
+		CardContainer<ImageCard> nines = get(CardSymbol.NINE);
 		
 		removeAll(nines, true);
 	}
 	
-	public void dealCards(Array<Player> players){
-		Array<Card> deck = new Array<Card>(this);
+	public void dealCards(Array<Player<ImageCard>> players){
+		Array<ImageCard> deck = new Array<ImageCard>(this);
 		
-		for (Player p : players){
+		for (Player<ImageCard> p : players){
 			p.reset();
 			if (deck.size==10)
-				for (Card c : deck) p.addCard(c);
+				for (ImageCard c : deck) p.addCard(c);
 			else for (int i=0; i<10; i++){
-				Card c = deck.random();
+				ImageCard c = deck.random();
 				deck.removeValue(c, true);
 				p.addCard(c);
 			}

@@ -16,8 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.eg.cards.Card;
 import com.eg.cards.GameLoop;
+import com.eg.cards.ImageCard;
 import com.eg.cards.PutListener;
 
 public class GUI extends Table {
@@ -52,8 +52,8 @@ public class GUI extends Table {
 		handTable = new Table();
 		
 		addListener(new PutListener(){
-			public void put(Card card){
-				loop.playCard(card);
+			public void put(ImageCard card){
+				loop.input(card);
 			}
 		});
 		
@@ -142,15 +142,15 @@ public class GUI extends Table {
 		
 		stackTable.clear();
 		
-		for (Card card : loop.getStack()){
-	        card.setScaling(Scaling.fit);
-	        stackTable.add(card).width(400).height(1600/3);
+		for (ImageCard card : loop.getStack()){
+	        card.img.setScaling(Scaling.fit);
+	        stackTable.add(card.img).width(400).height(1600/3);
 		}
 		
 		handTable.clear();
-		for (Card card : loop.getPlayers().first()) {
-	        card.setScaling(Scaling.fit);
-	        handTable.add(card).width(600).height(800);	        
+		for (ImageCard card : loop.getPlayers().first()) {
+	        card.img.setScaling(Scaling.fit);
+	        handTable.add(card.img).width(600).height(800);	        
 		}
 	}	
 

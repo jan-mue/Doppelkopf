@@ -1,11 +1,6 @@
 package com.eg.cards;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-public class Card extends Image implements Comparable<Card>{
+public class Card implements Comparable<Card>{
 	
 	public enum CardSuit {
 		DIAMONDS, HEARTS, SPADES, CLUBS;
@@ -27,39 +22,15 @@ public class Card extends Image implements Comparable<Card>{
 	private final CardSymbol symbol;
 	private final int trump;
 	
-	public Card(AtlasRegion region){
-		super(region);
-		
-		suit = findSuit(region);
-		symbol = findSymbol(region);
+	public Card(final CardSuit suit, final CardSymbol symbol){
+		this.suit = suit;
+		this.symbol = symbol;
 		trump = findTrump();
-		
-		addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-				fire(new PutEvent(Card.this));
-			}
-		});
 	}
 	
 	public CardSuit getSuit(){ return suit; }
 	public CardSymbol getSymbol(){ return symbol; }
 	public int getTrumpValue(){ return trump; }
-	
-	private CardSuit findSuit(AtlasRegion region){
-		if (region.name.contains("club")) return CardSuit.CLUBS;
-		if (region.name.contains("spade")) return CardSuit.SPADES;
-		if (region.name.contains("heart")) return CardSuit.HEARTS;
-		return CardSuit.DIAMONDS;
-	}
-	
-	private CardSymbol findSymbol(AtlasRegion region){
-		if (region.name.contains("Ace")) return CardSymbol.ACE;
-		if (region.name.contains("10")) return CardSymbol.TEN;
-		if (region.name.contains("King")) return CardSymbol.KING;
-		if (region.name.contains("Queen")) return CardSymbol.QUEEN;
-		if (region.name.contains("Jack")) return CardSymbol.KNAVE;
-		return CardSymbol.NINE;
-	}
 	
 	private int findTrump(){
 		if (symbol == CardSymbol.KNAVE) return 2;

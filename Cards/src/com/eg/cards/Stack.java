@@ -2,12 +2,14 @@ package com.eg.cards;
 
 import com.eg.cards.Card.CardSuit;
 
-public class Stack extends CardContainer{
+public class Stack<T extends Card> extends CardContainer<T>{
 	
 	private Card highcard;
+	private final CardContainer<T> played;
 	
 	public Stack(){
 		super(4);
+		played = new CardContainer<T>(40);
 	}
 	
 	public int count(){
@@ -15,6 +17,8 @@ public class Stack extends CardContainer{
 		for (Card c : this) pts += c.getSymbol().getValue();
 		return pts;
 	}
+	
+	public CardContainer<T> getPlayedCards() { return played; }
 	
 	public boolean isTrump(){
 		if (size==0) return false;
@@ -28,7 +32,7 @@ public class Stack extends CardContainer{
 	
 	public Card getHighCard(){ return highcard; }
 	
-	public boolean check(Card c, Player p){
+	public boolean check(T c, Player<T> p){
 		return size==0 ||
 				(isTrump() && (c.getTrumpValue()>0 || !p.containsTrump()))
 				|| (!isTrump() && ((c.getTrumpValue()==0 && getSuit().equals(c.getSuit()))
@@ -37,10 +41,12 @@ public class Stack extends CardContainer{
 	
 	@Override
 	//returns true if card was higher
-	public boolean addCard(final Card card) throws IllegalArgumentException{			
+	public boolean addCard(final T card) throws IllegalArgumentException{			
 		if(!super.addCard(card)) throw new IllegalArgumentException();
 		
-		else if (highcard == null || (((card.getTrumpValue()>0) || //Trump
+		played.addCard(card);
+		
+		if (highcard == null || (((card.getTrumpValue()>0) || //Trump
 				(!isTrump() && card.getSuit().equals(first().getSuit()))) //Same Color
 				&& card.compareTo(highcard)>0)){
 			highcard = card;

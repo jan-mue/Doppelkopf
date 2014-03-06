@@ -4,11 +4,11 @@ import com.eg.cards.Card.CardSuit;
 import com.eg.cards.Card.CardSymbol;
 import com.eg.cards.ui.CardGame;
 
-public class Player extends CardContainer{
+public class Player<T extends Card> extends CardContainer<T>{
 	
 	private int points=0;
 	public final int id;
-	private Player partner;
+	private Player<T> partner;
 	private boolean team;
 	
 	public Player(int id){
@@ -18,11 +18,26 @@ public class Player extends CardContainer{
 		team = false;
 	}
 	
-	public Player getPartner(){ return partner; }
+	public Player<T> getPartner(){ return partner; }
+	
 	public boolean getTeamVisible(){ return team; }
 	
+	public int getPoints(){ return points; }
 	
-	public boolean playCard(final Card card, final Stack stack) throws IllegalArgumentException{
+	public void addPoints(int points){
+		this.points += Math.abs(points);
+	}
+	
+	@Override
+	public void reset(){
+		super.reset();
+		points=0;		
+		partner = null;
+		team = false;
+	}
+	
+	
+	public boolean play(final T card, final Stack<T> stack) throws IllegalArgumentException{
 		if (CardGame.debug) System.out.println(card + " played by " + this);
 		
 		if (card.getSymbol().equals(CardSymbol.QUEEN) && card.getSuit().equals(CardSuit.CLUBS))
@@ -44,13 +59,13 @@ public class Player extends CardContainer{
 	}
 	
 	//Overloaded for AI-play
-	public boolean playCard(final Stack stack, Player best){
-		return playCard(selectCard(stack, best), stack);
+	public boolean play(final Stack<T> stack, Player<T> best){
+		return play(selectCard(stack, best), stack);
 	}
 	
-	private Card selectCard(final Stack stack, Player best){
-		CardContainer colors = getColors();
-		CardContainer trumps = new CardContainer(this);
+	private T selectCard(final Stack<T> stack, Player<T> best){
+		CardContainer<T> colors = getColors();
+		CardContainer<T> trumps = new CardContainer<T>(this);
 		trumps.removeAll(colors, true);
 		
 		colors.sort();
@@ -58,13 +73,14 @@ public class Player extends CardContainer{
 		
 		Card highcard = stack.getHighCard();
 		
-		//Player leads
+		//player leads
 		if (highcard == null){
 			if (colors.contains(CardSymbol.ACE)){
-				CardContainer aces=colors.get(CardSymbol.ACE);
+				CardContainer<T> aces=colors.get(CardSymbol.ACE);
 				for (int i=aces.size-1; i>=0; i--){
-					Card c=aces.get(i);
-					if(colors.count(c.getSuit())<(c.getSuit().equals(CardSuit.HEARTS)? 2 : 4))
+					T c=aces.get(i);
+					if(colors.count(c.getSuit())<(c.getSuit().equals(CardSuit.HEARTS)? 2 : 4) &&
+							stack.getPlayedCards().count(c.getSuit())<3)
 						return c;
 				}
 			}
@@ -72,32 +88,33 @@ public class Player extends CardContainer{
 			//no (fitting) ace found
 			
 			if (trumps.size!=0){
-				CardContainer tmp = trumps.get(CardSuit.HEARTS, CardSymbol.TEN);
-				if (tmp.size==2) return tmp.first();
-				tmp = trumps.get(CardSymbol.TEN);
-				trumps.removeAll(tmp, true);
-				tmp = trumps.get(CardSymbol.ACE);
-				trumps.removeAll(tmp, true);
+				//play highest card
+				CardContainer<T> tmp = trumps.get(CardSuit.HEARTS, CardSymbol.TEN);
+				if (tmp.size==2 && stack.getPlayedCards().size>20) return tmp.first();
 				
-				if (trumps.size>0){
-					if (trumps.contains(CardSymbol.KNAVE)){
-						CardContainer knaves = trumps.get(CardSymbol.KNAVE);
-						return knaves.random();
-					}
-					return trumps.first();
+				//play trump with low point value
+				if (trumps.contains(CardSymbol.KNAVE)){
+					CardContainer<T> knaves = trumps.get(CardSymbol.KNAVE);
+					return knaves.random();
+				}
+				
+				//no knave found
+				if (trumps.contains(CardSymbol.QUEEN)){
+					CardContainer<T> queens = trumps.get(CardSymbol.QUEEN);
+					return queens.first();
 				}
 			}
 			
 			//no (fitting) trump found
 			
 			if (colors.contains(CardSymbol.KING)){
-				CardContainer kings = colors.get(CardSymbol.KING);
+				CardContainer<T> kings = colors.get(CardSymbol.KING);
 				return kings.first();
 			}
 			if (colors.size!=0) return colors.first();
 		}
 		
-		//Play Color
+		//play color
 		if(!stack.isTrump()){
 			
 			CardSuit suit = stack.getSuit();
@@ -105,13 +122,13 @@ public class Player extends CardContainer{
 				
 				if (CardGame.debug) System.out.println(this+" has a Color of Suit " + suit);
 				
-				//Remove all other colors
-				CardContainer tmp = new CardContainer(colors.size);
-				for (Card c : colors) if (!c.getSuit().equals(suit))
+				//remove all other colors
+				CardContainer<T> tmp = new CardContainer<T>(colors.size);
+				for (T c : colors) if (!c.getSuit().equals(suit))
 					tmp.add(c);
 				colors.removeAll(tmp, true);
 				
-				//Highest Card is Trump or is higher Color than all the available cards
+				//highest Card is Trump or is higher Color than all the available cards
 				if(highcard.getTrumpValue()!=0 || highcard.compareTo(colors.peek())>=0){
 					//Same team?
 					if (best == partner)
@@ -142,27 +159,13 @@ public class Player extends CardContainer{
 		}
 		
 		//Find lowest fitting trump
-		Card lowest = null;
-		for (Card c : trumps) if (c.compareTo(highcard)>0){
+		T lowest = null;
+		for (T c : trumps) if (c.compareTo(highcard)>0){
 			lowest = c;
 			break;
 		}
 		
 		return (lowest==null)? trumps.first() : lowest;
-	}
-	
-	public void addPoints(int points){
-		this.points += Math.abs(points);
-	}
-	
-	public int getPoints(){ return points; }
-	
-	@Override
-	public void reset(){
-		super.reset();
-		points=0;		
-		partner = null;
-		team = false;
 	}
 	
 	@Override

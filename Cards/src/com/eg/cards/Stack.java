@@ -9,7 +9,7 @@ public class Stack extends CardContainer{
 	
 	public Stack(){
 		super(4);
-		played = new CardContainer(40);
+		played = new CardContainer(48);
 	}
 	
 	public int count(){

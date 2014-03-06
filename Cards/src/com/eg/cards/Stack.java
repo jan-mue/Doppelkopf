@@ -5,9 +5,11 @@ import com.eg.cards.Card.CardSuit;
 public class Stack extends CardContainer{
 	
 	private Card highcard;
+	private final CardContainer played;
 	
 	public Stack(){
 		super(4);
+		played = new CardContainer(40);
 	}
 	
 	public int count(){
@@ -26,6 +28,8 @@ public class Stack extends CardContainer{
 		return first().getSuit();
 	}
 	
+	public CardContainer getPlayedCards() { return played; }
+	
 	public Card getHighCard(){ return highcard; }
 	
 	public boolean check(Card c, Player p){
@@ -40,8 +44,10 @@ public class Stack extends CardContainer{
 	public boolean addCard(final Card card) throws IllegalArgumentException{			
 		if(!super.addCard(card)) throw new IllegalArgumentException();
 		
-		else if (highcard == null || (((card.getTrumpValue()>0) || //Trump
-				(!isTrump() && card.getSuit().equals(first().getSuit()))) //Same Color
+		played.addCard(card);
+		
+		if (highcard == null || (((card.getTrumpValue()>0) || //trump
+				(!isTrump() && card.getSuit().equals(first().getSuit()))) //same color
 				&& card.compareTo(highcard)>0)){
 			highcard = card;
 			return true;

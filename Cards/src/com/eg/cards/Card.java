@@ -45,14 +45,14 @@ public class Card extends Image implements Comparable<Card>{
 	public CardSymbol getSymbol(){ return symbol; }
 	public int getTrumpValue(){ return trump; }
 	
-	private CardSuit findSuit(AtlasRegion region){
+	private static CardSuit findSuit(AtlasRegion region){
 		if (region.name.contains("club")) return CardSuit.CLUBS;
 		if (region.name.contains("spade")) return CardSuit.SPADES;
 		if (region.name.contains("heart")) return CardSuit.HEARTS;
 		return CardSuit.DIAMONDS;
 	}
 	
-	private CardSymbol findSymbol(AtlasRegion region){
+	private static CardSymbol findSymbol(AtlasRegion region){
 		if (region.name.contains("Ace")) return CardSymbol.ACE;
 		if (region.name.contains("10")) return CardSymbol.TEN;
 		if (region.name.contains("King")) return CardSymbol.KING;

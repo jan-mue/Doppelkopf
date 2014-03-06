@@ -75,6 +75,13 @@ public class CardContainer extends Array<Card>{
 		return false;
 	}
 	
+	public boolean containsColor(){
+		if (size==0) return false;
+		for (Card c : this)
+			if (c.getTrumpValue()==0) return true;
+		return false;
+	}
+	
 	public boolean containsTrump(){
 		if (size==0) return false;
 		for (Card c : this)
@@ -95,6 +102,14 @@ public class CardContainer extends Array<Card>{
 		if (size==0) return result;
 		for (Card c : this)
 			if (c.getSymbol().equals(symbol)) result++;
+		return result;
+	}
+	
+	public int count(final CardSuit suit, final CardSymbol symbol){
+		int result=0;
+		if (size==0) return result;
+		for (Card c : this)
+			if (c.getSuit().equals(suit) && c.getSymbol().equals(symbol)) result++;
 		return result;
 	}
 	

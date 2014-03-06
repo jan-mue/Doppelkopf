@@ -32,14 +32,16 @@ public class TabBar extends WidgetGroup{
 	private ImageButton nav;
 	private Array<AtlasRegion> iconRegions;
 	private GameLoop loop;
+	private BitmapFont font;
 	
-	public TabBar(final GameLoop loop, final GUI gui,
-			final CardGame game, final BitmapFont font){
+	public TabBar(final GameLoop loop, final GUI gui, final CardGame game){
 		
 		setTouchable(Touchable.enabled);
 		
 		this.loop = loop;
 		TextureAtlas atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
+		font = game.getAssets().get("fonts/Roboto-Regular.ttf", BitmapFont.class);
+		font.setScale(1);
         
         AtlasRegion avatar = atlas.findRegion("avatar");
         AtlasRegion tabBg = atlas.findRegion("tab");

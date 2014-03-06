@@ -1,9 +1,7 @@
 package com.eg.cards.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -23,13 +21,9 @@ public class LoadingIndicator extends Table{
 		setFillParent(true);
 		if (CardGame.debug) debug();
 		
-		FreeTypeFontGenerator generator =
-        		new FreeTypeFontGenerator(Gdx.files.internal("fonts/dosis.medium.ttf"));
-        titleFont = generator.generateFont(150);
-        generator.dispose();
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-        font = generator.generateFont(40);
-        generator.dispose();
+		titleFont = game.getAssets().get("fonts/dosis.medium.ttf", BitmapFont.class);
+        font = game.getAssets().get("fonts/Roboto-Regular.ttf", BitmapFont.class);
+        font.setScale(2/3f);
 		
 		LabelStyle titleStyle = new LabelStyle();
 		titleStyle.font = titleFont;

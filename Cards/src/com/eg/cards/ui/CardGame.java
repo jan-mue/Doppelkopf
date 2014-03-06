@@ -3,9 +3,12 @@ package com.eg.cards.ui;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.eg.cards.ui.FreeTypeFontLoader.FontParameter;
 
 public class CardGame extends Game{
 	
@@ -21,7 +24,15 @@ public class CardGame extends Game{
 
 	@Override
 	public void create() {
-		manager = new AssetManager();
+		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
+		manager = new AssetManager(resolver);
+		manager.setLoader(BitmapFont.class, new FreeTypeFontLoader(resolver));
+		manager.load("fonts/dosis.medium.ttf", BitmapFont.class, new FontParameter(150));
+		manager.load("fonts/Roboto-Regular.ttf", BitmapFont.class, new FontParameter(60));
+		manager.finishLoading();
+		manager.load("fonts/RobotoCondensed-Regular.ttf", BitmapFont.class, new FontParameter(80));
+		manager.load("fonts/Roboto-Medium.ttf", BitmapFont.class, new FontParameter(60));
+		
 		manager.load("ui.atlas", TextureAtlas.class);
 		manager.load("cards.atlas", TextureAtlas.class);
 		loaded = false;

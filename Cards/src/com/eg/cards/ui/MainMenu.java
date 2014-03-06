@@ -1,12 +1,9 @@
 package com.eg.cards.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -31,17 +28,8 @@ public class MainMenu extends Table{
 		atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
         AtlasRegion region = atlas.findRegion("menubutton");
 		
-		FreeTypeFontGenerator generator =
-        		new FreeTypeFontGenerator(Gdx.files.internal("fonts/dosis.medium.ttf"));
-		FreeTypeFontParameter titleParam = new FreeTypeFontParameter();
-		titleParam.size = 150;
-        titleFont = generator.generateFont(titleParam);
-        generator.dispose();
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/RobotoCondensed-Regular.ttf"));
-        FreeTypeFontParameter param = new FreeTypeFontParameter();
-        param.size = 80;
-        font = generator.generateFont(param);
-        generator.dispose();
+        titleFont = game.getAssets().get("fonts/dosis.medium.ttf", BitmapFont.class);
+        font = game.getAssets().get("fonts/RobotoCondensed-Regular.ttf", BitmapFont.class);
 		
 		LabelStyle style = new LabelStyle();
         style.font = titleFont;

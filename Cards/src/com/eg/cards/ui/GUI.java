@@ -1,11 +1,9 @@
 package com.eg.cards.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,13 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 import com.eg.cards.Card;
 import com.eg.cards.GameLoop;
 import com.eg.cards.PutListener;
 
-public class GUI extends Table implements Disposable{
+public class GUI extends Table {
 	
 	public static final Color LIGHT = new Color(237/255f, 237/255f, 237/255f, 1);
 	public static final Color DARK = new Color(0.2f, 0.2f, 0.2f, 0.6f);
@@ -34,7 +31,7 @@ public class GUI extends Table implements Disposable{
 	private final Dialog error;
 	private final LabelStyle msgStyle;
 	private final Image cIcon;
-	private final BitmapFont defaultFont, msgFont;
+	private final BitmapFont font, msgFont;
 	private final TabBar tabs;
 	private final Menu menu;
 	
@@ -60,15 +57,8 @@ public class GUI extends Table implements Disposable{
 			}
 		});
 		
-		FreeTypeFontGenerator generator =
-        		new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-		defaultFont = generator.generateFont(60);
-        generator.dispose();
-        
-        generator =
-        		new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Medium.ttf"));
-        msgFont = generator.generateFont(60);
-        generator.dispose();
+		font = game.getAssets().get("fonts/Roboto-Regular.ttf", BitmapFont.class);
+        msgFont = game.getAssets().get("fonts/Roboto-Medium.ttf", BitmapFont.class);
         
 
         atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
@@ -79,7 +69,7 @@ public class GUI extends Table implements Disposable{
         /** Warning Dialog */
         
         WindowStyle dStyle = new WindowStyle();
-        dStyle.titleFont = defaultFont;
+        dStyle.titleFont = font;
         dStyle.titleFontColor = Color.WHITE;
         dStyle.background = new TextureRegionDrawable(msgbackground);
         
@@ -110,7 +100,7 @@ public class GUI extends Table implements Disposable{
         error.button(button);
         
         /** Tab bar */
-        tabs = new TabBar(loop, this, game, defaultFont);
+        tabs = new TabBar(loop, this, game);
         
         menu = new Menu(game, this, tabs);
         
@@ -162,14 +152,6 @@ public class GUI extends Table implements Disposable{
 	        card.setScaling(Scaling.fit);
 	        handTable.add(card).width(600).height(800);	        
 		}
-	}
-
-	@Override
-	public void dispose() {
-		defaultFont.dispose();
-		msgFont.dispose();
-	}
-	
-	
+	}	
 
 }

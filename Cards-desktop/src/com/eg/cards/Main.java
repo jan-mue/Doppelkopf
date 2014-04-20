@@ -2,7 +2,7 @@ package com.eg.cards;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.eg.cards.ui.CardGame;
+import com.eg.cards.view.CardGame;
 
 public class Main {
 	public static void main(String[] args) {

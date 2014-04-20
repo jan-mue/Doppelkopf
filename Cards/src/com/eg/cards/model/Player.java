@@ -1,21 +1,27 @@
-package com.eg.cards;
+package com.eg.cards.model;
 
-import com.eg.cards.Card.CardSuit;
-import com.eg.cards.Card.CardSymbol;
-import com.eg.cards.ui.CardGame;
+import com.eg.cards.model.Card.CardSuit;
+import com.eg.cards.model.Card.CardSymbol;
+import com.eg.cards.view.CardGame;
 
 public class Player extends CardContainer{
 	
-	private int points=0;
+	private static final long serialVersionUID = 2752820128599523366L;
 	public final int id;
+	private final GameTree tree;
+	private final Stack stack;
+	
+	private int points;
 	private Player partner;
 	private boolean team;
 	
-	public Player(int id){
+	public Player(int id, Stack stack){
 		super(10);
 		this.id=id;
-		partner = null;
-		team = false;
+		this.stack = stack;
+		reset();
+		
+		tree = new GameTree(this, stack);
 	}
 	
 	public Player getPartner(){ return partner; }
@@ -31,42 +37,40 @@ public class Player extends CardContainer{
 	@Override
 	public void reset(){
 		super.reset();
-		points=0;		
+		points = 0;		
 		partner = null;
 		team = false;
 	}
 	
 	
-	public boolean play(final Card card, final Stack stack) throws IllegalArgumentException{
-		if (CardGame.debug) System.out.println(card + " played by " + this);
+	public void play(final Card card) throws IllegalArgumentException{
+		if (CardGame.DEBUG) System.out.println(card + " played by " + this);
 		
+		//set team if club queen is played
 		if (card.getSymbol().equals(CardSymbol.QUEEN) && card.getSuit().equals(CardSuit.CLUBS))
 			team = true;
 		
-		if (!stack.check(card, this)) 
-			throw new IllegalArgumentException();
-		
-		if (!remove(card)) 
-			throw new IllegalArgumentException();
+		if (!remove(card, true)) 
+			throw new IllegalArgumentException("Could not remove card");
 		
 		try{
-			return stack.addCard(card);
+			stack.playCard(card, this);
 		}
 		catch (IllegalArgumentException e){
-			addCard(card);
+			add(card);
 			throw e;
 		}
 	}
 	
 	//Overloaded for AI-play
-	public boolean play(final Stack stack, Player best){
-		return play(selectCard(stack, best), stack);
+	public void play(){
+		play(selectCard(stack.getBestPlayer()));
 	}
 	
-	private Card selectCard(final Stack stack, Player best){
+	private Card selectCard(Player best){
 		CardContainer colors = getColors();
 		CardContainer trumps = new CardContainer(this);
-		trumps.removeAll(colors, true);
+		trumps.removeAll(colors);
 		
 		colors.sort();
 		trumps.sort();
@@ -75,43 +79,38 @@ public class Player extends CardContainer{
 		
 		//player leads
 		if (highcard == null){
+			
 			if (colors.contains(CardSymbol.ACE)){
-				CardContainer aces=colors.get(CardSymbol.ACE);
-				for (int i=aces.size-1; i>=0; i--){
-					Card c=aces.get(i);
-					if(colors.count(c.getSuit())<(c.getSuit().equals(CardSuit.HEARTS)? 2 : 4) &&
-							stack.getPlayedCards().count(c.getSuit())<3)
-						return c;
-				}
+				CardContainer aces = colors.get(CardSymbol.ACE);
+				CardContainer tmp = new CardContainer(aces);
+				for (Card c: aces)
+					if(colors.count(c.getSuit())>(c.getSuit().equals(CardSuit.HEARTS)? 1 : 3) ||
+							stack.getPlayedCards().count(c.getSuit())>(c.getSuit().equals(CardSuit.HEARTS)? 0 : 2))
+						tmp.add(c);
+				aces.removeAll(tmp);
+				if(aces.size()>0) return tree.getBestCard(aces);
 			}
 			
 			//no (fitting) ace found
 			
-			if (trumps.size!=0){
-				//play highest card
+			if (trumps.size()!=0){
+				//play highest card (dulle)
 				CardContainer tmp = trumps.get(CardSuit.HEARTS, CardSymbol.TEN);
-				if (tmp.size==2 && stack.getPlayedCards().size>20) return tmp.first();
+				if (tmp.size()==2 && stack.getPlayedCards().size()>20) return tmp.first();
 				
 				//play trump with low point value
-				if (trumps.contains(CardSymbol.KNAVE)){
-					CardContainer knaves = trumps.get(CardSymbol.KNAVE);
-					return knaves.random();
-				}
+				if (trumps.contains(CardSymbol.KNAVE))
+					return tree.getBestCard(trumps.get(CardSymbol.KNAVE));
 				
 				//no knave found
-				if (trumps.contains(CardSymbol.QUEEN)){
-					CardContainer queens = trumps.get(CardSymbol.QUEEN);
-					return queens.first();
-				}
+				if (trumps.contains(CardSymbol.QUEEN))
+					return tree.getBestCard(trumps.get(CardSymbol.QUEEN));
 			}
 			
 			//no (fitting) trump found
 			
-			if (colors.contains(CardSymbol.KING)){
-				CardContainer kings = colors.get(CardSymbol.KING);
-				return kings.first();
-			}
-			if (colors.size!=0) return colors.first();
+			if (colors.contains(CardSymbol.KING)) return tree.getBestCard(colors.get(CardSymbol.KING));
+			return tree.getBestCard(this);
 		}
 		
 		//play Color
@@ -120,13 +119,13 @@ public class Player extends CardContainer{
 			CardSuit suit = stack.getSuit();
 			if(colors.contains(suit)){
 				
-				if (CardGame.debug) System.out.println(this+" has a Color of Suit " + suit);
+				if (CardGame.DEBUG) System.out.println(this+" has a Color of Suit " + suit);
 				
 				//remove all other colors
-				CardContainer tmp = new CardContainer(colors.size);
+				CardContainer tmp = new CardContainer(colors.size());
 				for (Card c : colors) if (!c.getSuit().equals(suit))
 					tmp.add(c);
-				colors.removeAll(tmp, true);
+				colors.removeAll(tmp);
 				
 				//highest card is trump or is higher color than all the available cards
 				if(highcard.getTrumpValue()!=0 || highcard.compareTo(colors.peek())>=0){
@@ -142,7 +141,7 @@ public class Player extends CardContainer{
 			
 			}
 			else{
-				if (CardGame.debug) System.out.println(this+" has no Color of Suit " + suit);
+				if (CardGame.DEBUG) System.out.println(this+" has no Color of Suit " + suit);
 				
 				//play color only to help partner
 				if (best == partner){
@@ -153,8 +152,8 @@ public class Player extends CardContainer{
 		
 		//play trump
 		
-		if (trumps.size==0){
-			if (CardGame.debug) System.out.println(this+" has no trumps");
+		if (trumps.size()==0){
+			if (CardGame.DEBUG) System.out.println(this+" has no trumps");
 			return colors.first();
 		}
 		

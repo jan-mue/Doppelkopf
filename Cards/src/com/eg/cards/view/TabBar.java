@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,10 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.eg.cards.Card;
-import com.eg.cards.GameLoop;
-import com.eg.cards.Card.CardSuit;
-import com.eg.cards.Card.CardSymbol;
+import com.eg.cards.model.Card;
+import com.eg.cards.model.GameLoop;
+import com.eg.cards.model.Card.CardSuit;
+import com.eg.cards.model.Card.CardSymbol;
 
 public class TabBar extends WidgetGroup{
 	
@@ -88,7 +88,7 @@ public class TabBar extends WidgetGroup{
         navStyle.imageUp = new TextureRegionDrawable(navIcon);
         nav = new ImageButton(navStyle);
         nav.left();
-        if (CardGame.debug) nav.debug();
+        if (CardGame.DEBUG) nav.debug();
         nav.addListener(new ClickListener(){
         	public void clicked(InputEvent event, float x, float y){
         		gui.toggleMenu();
@@ -115,7 +115,7 @@ public class TabBar extends WidgetGroup{
         	tab.add(top).height(120).padLeft(20).row();
         	tab.add(bottom).height(100).padRight(20);
         	
-        	if (CardGame.debug) tab.debug();
+        	if (CardGame.DEBUG) tab.debug();
         	tab.setBounds(71+246*i, 0, 270, 220);
         	
         	addActor(tab);
@@ -126,7 +126,7 @@ public class TabBar extends WidgetGroup{
 	public ImageButton getNavigationButton(){ return nav; }
 	
 	public void update(){
-		for (int i=0; i<loop.getPlayers().size; i++){
+		for (int i=0; i<loop.getPlayers().size(); i++){
 			labels.get(i).setText(Integer.toString(loop.getPlayers().get(i).getPoints()));
 			if(loop.getPlayers().get(i).getTeamVisible()){
 				tabs.get(i).setColor(Color.BLACK);
@@ -145,7 +145,7 @@ public class TabBar extends WidgetGroup{
 		}
 		
 		for (Image img : icons) img.setDrawable(null);
-		for (int i=0; i<loop.getStack().size; i++){
+		for (int i=0; i<loop.getStack().size(); i++){
 			int index = loop.getStartPlayer()+i;
 			index = index>3? index-4 : index;
 			Card c = loop.getStack().get(i);

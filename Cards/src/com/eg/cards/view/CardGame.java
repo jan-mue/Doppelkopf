@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -8,11 +8,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.eg.cards.ui.FreeTypeFontLoader.FontParameter;
+import com.eg.cards.view.FreeTypeFontLoader.FontParameter;
 
 public class CardGame extends Game{
 	
-	public final static boolean debug = false;
+	public final static boolean DEBUG = false;
+	public final static boolean NINES = false;
 
 	private LoadScreen loadScreen;
 	private MainMenuScreen mainMenuScreen;
@@ -66,13 +67,16 @@ public class CardGame extends Game{
 		stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         
-        if (debug) Table.drawDebug(stage);
+        if (DEBUG) Table.drawDebug(stage);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		getScreen().resize(width, height);
-		stage.setViewport(1080, 1920, true);
+		
+		//to fix for android/web!
+		stage.getViewport().setWorldSize(width*3, height*3);
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override

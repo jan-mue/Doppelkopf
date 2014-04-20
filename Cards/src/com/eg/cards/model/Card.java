@@ -1,9 +1,10 @@
-package com.eg.cards;
+package com.eg.cards.model;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.eg.cards.controller.PutEvent;
 
 public class Card extends Image implements Comparable<Card>{
 	
@@ -44,6 +45,7 @@ public class Card extends Image implements Comparable<Card>{
 	public CardSuit getSuit(){ return suit; }
 	public CardSymbol getSymbol(){ return symbol; }
 	public int getTrumpValue(){ return trump; }
+	public int getValue(){ return symbol.getValue(); }
 	
 	private static CardSuit findSuit(AtlasRegion region){
 		if (region.name.contains("club")) return CardSuit.CLUBS;
@@ -92,5 +94,11 @@ public class Card extends Image implements Comparable<Card>{
         final Card anotherCard = (Card) anObject;
         return getSuit().equals(anotherCard.getSuit()) && getSymbol().equals(anotherCard.getSymbol());
     }
+	
+	@Override
+	public int hashCode(){
+		final int PRIME = 31;
+		return getSuit().hashCode() * PRIME + getSymbol().hashCode();
+	}
 
 }

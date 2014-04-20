@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -47,7 +47,7 @@ public class Menu extends Table{
 		this.tabs = tabs;
 		nav = tabs.getNavigationButton().getImage();
 		
-		if (CardGame.debug) debug();
+		if (CardGame.DEBUG) debug();
 		
 		setTouchable(Touchable.enabled);
 		center();

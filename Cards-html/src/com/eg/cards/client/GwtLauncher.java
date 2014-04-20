@@ -1,6 +1,6 @@
 package com.eg.cards.client;
 
-import com.eg.cards.ui.CardGame;
+import com.eg.cards.view.CardGame;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;

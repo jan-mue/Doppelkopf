@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;

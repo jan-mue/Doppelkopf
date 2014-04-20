@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,9 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.eg.cards.Card;
-import com.eg.cards.GameLoop;
-import com.eg.cards.PutListener;
+import com.eg.cards.controller.PutListener;
+import com.eg.cards.model.Card;
+import com.eg.cards.model.GameLoop;
 
 public class GUI extends Table {
 	
@@ -46,7 +46,7 @@ public class GUI extends Table {
         
         setFillParent(true);
         setClip(true);
-        if (CardGame.debug) debug();
+        if (CardGame.DEBUG) debug();
         
         stackTable = new Table();
 		handTable = new Table();
@@ -74,7 +74,7 @@ public class GUI extends Table {
         dStyle.background = new TextureRegionDrawable(msgbackground);
         
         error = new Dialog("", dStyle);
-        if (CardGame.debug) error.debug();
+        if (CardGame.DEBUG) error.debug();
         
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(but);
@@ -148,7 +148,7 @@ public class GUI extends Table {
 		}
 		
 		handTable.clear();
-		for (Card card : loop.getPlayers().first()) {
+		for (Card card : loop.getPlayers().get(0)) {
 	        card.setScaling(Scaling.fit);
 	        handTable.add(card).width(600).height(800);	        
 		}

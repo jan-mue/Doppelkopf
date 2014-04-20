@@ -1,6 +1,7 @@
-package com.eg.cards;
+package com.eg.cards.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
+import com.eg.cards.model.Card;
 
 public class PutEvent extends Event{
 	

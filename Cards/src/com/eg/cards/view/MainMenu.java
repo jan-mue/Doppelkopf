@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,7 +23,7 @@ public class MainMenu extends Table{
 		super();
 		
 		setFillParent(true);
-		if (CardGame.debug) debug();
+		if (CardGame.DEBUG) debug();
 		
 		atlas = game.getAssets().get("ui.atlas", TextureAtlas.class);
         AtlasRegion region = atlas.findRegion("menubutton");

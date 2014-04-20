@@ -1,4 +1,4 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,7 +19,7 @@ public class LoadingIndicator extends Table{
 		this.game = game;
 		
 		setFillParent(true);
-		if (CardGame.debug) debug();
+		if (CardGame.DEBUG) debug();
 		
 		titleFont = game.getAssets().get("fonts/dosis.medium.ttf", BitmapFont.class);
         font = game.getAssets().get("fonts/Roboto-Regular.ttf", BitmapFont.class);

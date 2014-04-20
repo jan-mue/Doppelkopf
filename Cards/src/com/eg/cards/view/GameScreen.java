@@ -1,9 +1,9 @@
-package com.eg.cards.ui;
+package com.eg.cards.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.eg.cards.GameLoop;
+import com.eg.cards.model.GameLoop;
 
 public class GameScreen implements Screen {
 	
